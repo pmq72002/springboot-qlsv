@@ -6,13 +6,11 @@ import com.pmq.spring.qlsv.model.*;
 import com.pmq.spring.qlsv.service.ScoreService;
 import com.pmq.spring.qlsv.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-@Controller
+@RestController
 @RequestMapping("/student")
 public class RestApiController {
 
@@ -33,29 +31,24 @@ public class RestApiController {
 
     //1. xem danh sach sinh vien
     @GetMapping("/")
-    public String getAllSinhVienLists(Model model){
-        List<StudentList> list = studentService.getAllStudentList();
-        model.addAttribute("students", list);
-        return "stulist";
+   public List<StudentList> getAllStudentList(){
+        return studentService.getAllStudentList();
     }
 
 
     //2. xem thong tin 1 sv
     @GetMapping("/{stuCode}")
-    public String getStudentById(@PathVariable String stuCode, Model model){
-        Student stu = studentService.getStudentById(stuCode);
-        model.addAttribute("stu", stu);
-        return "studetails";
+    public Student getStudentById(@PathVariable String stuCode){
+        return  studentService.getStudentById(stuCode);
     }
 
 
     //3. xem so mon sinh vien dang ki
     @GetMapping("/{stuCode}/subject")
-    public String getSubjectAndStudent(@PathVariable String stuCode, Model model){
+    public List<Map<String,Object>> getSubjectAndStudent(@PathVariable String stuCode){
         List<Map<String,Object>> fullList = scoreService.getSubjectAndStudent(stuCode);
-        Student stu = studentService.getStudentById(stuCode);
 
-        List<Map<String,Object>> result = fullList.stream().map(item -> {
+        return fullList.stream().map(item -> {
             Map<String, Object> map = new LinkedHashMap<>();
             map.put(StudentSub.STUCODE, item.get(StudentSub.STUCODE));
             map.put(StudentSub.STUNAME, item.get(StudentSub.STUNAME));
@@ -63,44 +56,30 @@ public class RestApiController {
             map.put(StudentSub.SUBNUM, item.get(StudentSub.SUBNUM));
             return map;
         }).toList();
-        model.addAttribute("list",result);
-        model.addAttribute("stu", stu);
-        return "stusubject";
     }
 
 
 
     //4. xem diem mon hoc cua sinh vien
     @GetMapping("/{stuCode}/score")
-    public String getScore(@PathVariable String stuCode, Model model){
-        List<Map<String, Object>> score = scoreService.getSubjectAndStudent(stuCode);
-        Student stu = studentService.getStudentById(stuCode);
-        model.addAttribute("score", score);
-        model.addAttribute("stu", stu);
-        return "stuscore";
+    public List<Map<String, Object>> getScore(@PathVariable String stuCode){
+       return scoreService.getSubjectAndStudent(stuCode);
     }
 
     //5. Nhap diem cua sinh vien
-    @PostMapping("/{stuCode}/score/{subCode}")
-    public String updateScore(@PathVariable String stuCode,
+    @PutMapping("/{stuCode}/score/{subCode}")
+    public Score updateScore(@PathVariable String stuCode,
                              @PathVariable String subCode,
-                             @RequestParam Double processPoint,
-                             @RequestParam Double componentPoint) {
-        Score score = new Score();
-        score.setProcessPoint(processPoint);
-        score.setComponentPoint(componentPoint);
-
-        scoreService.updateScore(stuCode, subCode, score);
-
-        return "redirect:/student/" + stuCode + "/score";
+                             @RequestBody Score score){
+        return scoreService.updateScore(stuCode,subCode,score);
     }
+
 
     //6. Xem ket qua do truot cua sinh vien
     @GetMapping("/{stuCode}/subject/summary")
-    public String getSummaryScore(@PathVariable String stuCode, Model model){
+    public  List<Map<String,Object>> getSummaryScore(@PathVariable String stuCode){
         List<Score> scoreList = scoreService.getScoreListByStudent(stuCode);
-        Student stu = studentService.getStudentById(stuCode);
-        List<Map<String,Object>> result = scoreList.stream().map(score -> {
+        return scoreList.stream().map(score -> {
             Map<String, Object> map = new LinkedHashMap<>();
             map.put(StudentSub.STUCODE,score.getStudent().getStuCode());
             map.put(StudentSub.STUNAME,score.getStudent().getStuName());
@@ -116,10 +95,6 @@ public class RestApiController {
 
             return map;
         }).toList();
-        model.addAttribute("result",result);
-        model.addAttribute("stu", stu);
-
-        return "stupass";
     }
 
 
