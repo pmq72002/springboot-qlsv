@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Chi tiết sinh viên</title>
@@ -8,13 +8,13 @@
 </head>
 <body>
 <h1>Thông tin điểm <br>Sinh viên <span th:text="${sv.tensv}"></span></h1>
-<table border="1" cellpadding="5" class="table-center">
+<table border="1" class="table-center">
     <tr>
-        <th>Môn học</th>
-        <th>Số tiết</th>
-        <th>Điểm QT</th>
-        <th>Điểm TP</th>
-        <th>Hành động</th>
+        <th scope="col">Môn học</th>
+        <th scope="col">Số tiết</th>
+        <th scope="col">Điểm QT</th>
+        <th scope="col">Điểm TP</th>
+        <th scope="col">Hành động</th>
     </tr>
     <tr th:each="item : ${diem}">
         <form th:action="@{|/sinhvien/${sv.msv}/diem/${item['maMH']}|}" method="post">
@@ -45,7 +45,7 @@
 
 
     <tr>
-        <th>
+        <th scope="col">
             <a th:href="@{'/sinhvien/'+${sv.msv}+'/monhoc/tongket'}"
                style="display: inline-block;
                             width: 180px;

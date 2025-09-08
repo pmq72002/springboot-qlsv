@@ -1,9 +1,10 @@
-package com.pmq.spring.QLSV.controller;
+package com.pmq.spring.qlsv.controller;
 
 
-import com.pmq.spring.QLSV.model.*;
-import com.pmq.spring.QLSV.service.DiemService;
-import com.pmq.spring.QLSV.service.SinhVienService;
+import com.pmq.spring.qlsv.constant.SinhVienSub;
+import com.pmq.spring.qlsv.model.*;
+import com.pmq.spring.qlsv.service.DiemService;
+import com.pmq.spring.qlsv.service.SinhVienService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,10 +15,16 @@ import java.util.*;
 @Controller
 @RequestMapping("/sinhvien")
 public class RestApiController {
-    @Autowired
+
     private SinhVienService sinhVienService;
-    @Autowired
+
     private DiemService diemService;
+    @Autowired
+    public RestApiController(SinhVienService sinhVienService, DiemService diemService) {
+        this.sinhVienService = sinhVienService;
+        this.diemService = diemService;
+    }
+    
     //add sinh vien
     @PostMapping
     public SinhVien createSinhVien(@RequestBody SinhVien sinhVien){
@@ -47,12 +54,13 @@ public class RestApiController {
     public String getMonHocVaSinhVien(@PathVariable String msv, Model model){
         List<Map<String,Object>> fullList = diemService.getMonHocVaSinhVien(msv);
         SinhVien sv = sinhVienService.getSinhVienById(msv);
+
         List<Map<String,Object>> result = fullList.stream().map(item -> {
             Map<String, Object> map = new LinkedHashMap<>();
-            map.put("msv", item.get("msv"));
-            map.put("tensv", item.get("tensv"));
-            map.put("tenMH", item.get("tenMH"));
-            map.put("soTiet", item.get("soTiet"));
+            map.put(SinhVienSub.MSV, item.get(SinhVienSub.MSV));
+            map.put(SinhVienSub.NAMESV, item.get(SinhVienSub.NAMESV));
+            map.put(SinhVienSub.NAMESUB, item.get(SinhVienSub.NAMESUB));
+            map.put(SinhVienSub.NUMSUB, item.get(SinhVienSub.NUMSUB));
             return map;
         }).toList();
         model.addAttribute("list",result);
@@ -94,17 +102,17 @@ public class RestApiController {
         SinhVien sv = sinhVienService.getSinhVienById(msv);
         List<Map<String,Object>> kq = diemList.stream().map(diem -> {
             Map<String, Object> map = new LinkedHashMap<>();
-            map.put("msv",diem.getSinhVien().getMsv());
-            map.put("tensv",diem.getSinhVien().getTensv());
-            map.put("soTiet",diem.getMonHoc().getSoTiet());
-            map.put("tenMH", diem.getMonHoc().getTenMH());
-            map.put("diemQT", diem.getDiemQT());
-            map.put("diemTP", diem.getDiemTP());
+            map.put(SinhVienSub.MSV,diem.getSinhVien().getMsv());
+            map.put(SinhVienSub.NAMESV,diem.getSinhVien().getTensv());
+            map.put(SinhVienSub.NUMSUB,diem.getMonHoc().getSoTiet());
+            map.put(SinhVienSub.NAMESUB, diem.getMonHoc().getTenMH());
+            map.put(SinhVienSub.SCOREQT, diem.getDiemQT());
+            map.put(SinhVienSub.SCORETP, diem.getDiemTP());
 
             double diemTK = diemService.tinhDiemTongKet(diem);
-            map.put("diemTongKet", diemTK);
+            map.put(SinhVienSub.SCORESUM, diemTK);
 
-            map.put("quaMon", diemService.daQuaMon(diem) ? "Đỗ" : "Trượt");
+            map.put(SinhVienSub.PASS, diemService.daQuaMon(diem) ? "Đỗ" : "Trượt");
 
             return map;
         }).toList();

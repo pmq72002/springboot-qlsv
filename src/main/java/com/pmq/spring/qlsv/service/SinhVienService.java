@@ -1,8 +1,8 @@
-package com.pmq.spring.QLSV.service;
+package com.pmq.spring.qlsv.service;
 
-import com.pmq.spring.QLSV.model.SinhVien;
-import com.pmq.spring.QLSV.model.SinhVienList;
-import com.pmq.spring.QLSV.repository.SinhVienRepository;
+import com.pmq.spring.qlsv.model.SinhVien;
+import com.pmq.spring.qlsv.model.SinhVienList;
+import com.pmq.spring.qlsv.repository.SinhVienRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,9 +10,12 @@ import java.util.List;
 
 @Service
 public class SinhVienService {
-    @Autowired
-    private SinhVienRepository sinhVienRepository;
 
+    private SinhVienRepository sinhVienRepository;
+    @Autowired
+    public SinhVienService (SinhVienRepository sinhVienRepository){
+        this.sinhVienRepository = sinhVienRepository;
+    }
     public List<SinhVien> getAllSinhVien(){
         return sinhVienRepository.findAll();
     }

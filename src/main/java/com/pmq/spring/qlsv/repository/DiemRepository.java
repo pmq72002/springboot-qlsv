@@ -1,7 +1,7 @@
-package com.pmq.spring.QLSV.repository;
+package com.pmq.spring.qlsv.repository;
 
-import com.pmq.spring.QLSV.model.Diem;
-import com.pmq.spring.QLSV.model.DiemId;
+import com.pmq.spring.qlsv.model.Diem;
+import com.pmq.spring.qlsv.model.DiemId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

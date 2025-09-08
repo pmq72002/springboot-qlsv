@@ -1,4 +1,4 @@
-package com.pmq.spring.QLSV;
+package com.pmq.spring.qlsv;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

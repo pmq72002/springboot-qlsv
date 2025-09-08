@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Danh sách môn học của sinh viên</title>
@@ -9,17 +9,17 @@
 <body>
 <h1>Danh sách môn học <br>Sinh viên <span th:text="${sv.tensv}"></span></h1>
 
-<table border="1" cellpadding="5" class="table-center">
+<table border="1"  class="table-center">
     <tr>
-        <th>Tên môn học</th>
-        <th>Số tiết</th>
+        <th scope="col">Tên môn học</th>
+        <th scope="col">Số tiết</th>
     </tr>
     <tr th:each="mh : ${list}">
         <td th:text="${mh.tenMH}"></td>
         <td th:text="${mh.soTiet}"></td>
     </tr>
     <tr>
-        <th>
+        <th scope="col">
             <a th:href =" @{'/sinhvien/' + ${sv.msv}+'/diem'}"
                style="display: inline-block;
                             width: 100px;

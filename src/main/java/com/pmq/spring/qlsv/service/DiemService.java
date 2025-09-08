@@ -1,10 +1,8 @@
-package com.pmq.spring.QLSV.service;
+package com.pmq.spring.qlsv.service;
 
-import com.pmq.spring.QLSV.model.Diem;
-import com.pmq.spring.QLSV.model.DiemId;
-import com.pmq.spring.QLSV.model.MonHoc;
-import com.pmq.spring.QLSV.model.SinhVien;
-import com.pmq.spring.QLSV.repository.DiemRepository;
+import com.pmq.spring.qlsv.model.Diem;
+import com.pmq.spring.qlsv.model.DiemId;
+import com.pmq.spring.qlsv.repository.DiemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +12,12 @@ import java.util.Map;
 
 @Service
 public class DiemService {
-    @Autowired
+
     private DiemRepository diemRepository;
+    @Autowired
+    public DiemService (DiemRepository diemRepository){
+        this.diemRepository = diemRepository;
+    }
 
     public List<Diem> getDiemListBySinhVien(String msv) {
         return diemRepository.findBySinhVien_Msv(msv);

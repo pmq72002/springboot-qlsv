@@ -1,4 +1,4 @@
-package com.pmq.spring.QLSV.model;
+package com.pmq.spring.qlsv.model;
 
 public class SinhVienList {
     private String msv;

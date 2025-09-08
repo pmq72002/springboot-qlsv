@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>pmq-spring-QLSV</artifactId>
+	<artifactId>pmq-spring-qlsv</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>pmq-spring-QLSV</name>
 	<description>Demo project for Spring Boot</description>

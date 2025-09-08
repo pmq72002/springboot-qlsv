@@ -1,4 +1,4 @@
-package com.pmq.spring.QLSV.model;
+package com.pmq.spring.qlsv.model;
 
 import jakarta.persistence.Embeddable;
 
