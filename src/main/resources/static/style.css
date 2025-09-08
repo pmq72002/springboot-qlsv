@@ -1,0 +1,5 @@
+.table-center th,
+.table-center td {
+    text-align: center;
+    vertical-align: middle;
+}

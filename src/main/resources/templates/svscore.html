@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết sinh viên</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+
+</head>
+<body>
+<h1>Thông tin điểm <br>Sinh viên <span th:text="${sv.tensv}"></span></h1>
+<table border="1" cellpadding="5" class="table-center">
+    <tr>
+        <th>Môn học</th>
+        <th>Số tiết</th>
+        <th>Điểm QT</th>
+        <th>Điểm TP</th>
+        <th>Hành động</th>
+    </tr>
+    <tr th:each="item : ${diem}">
+        <form th:action="@{|/sinhvien/${sv.msv}/diem/${item['maMH']}|}" method="post">
+            <td th:text="${item['tenMH']}"></td>
+            <td th:text="${item['soTiet']}"></td>
+            <td>
+                <input type="number" name="diemQT" th:value="${item['diemQT']}" step="0.1" min="0" max="10"/>
+            </td>
+            <td>
+                <input type="number" name="diemTP" th:value="${item['diemTP']}" step="0.1" min="0" max="10"/>
+            </td>
+            <td>
+                <button type="submit"
+                        style="
+                        width: 100px;
+                        height: 30px;
+                        text-align: center;
+                        background-color: #6C6C6C;
+                        color: white;
+                        text-decoration: none;
+                        cursor: pointer;
+                        border-radius: 5px;">
+                    Cập nhật
+                </button>
+            </td>
+        </form>
+    </tr>
+
+
+    <tr>
+        <th>
+            <a th:href="@{'/sinhvien/'+${sv.msv}+'/monhoc/tongket'}"
+               style="display: inline-block;
+                            width: 180px;
+                            height: 30px;
+                            line-height: 30px;
+                            text-align: center;
+                            background-color: #6C6C6C;
+                            color: white;
+                            text-decoration: none;
+                            border-radius: 5px;"
+            >Xem kết quả qua môn</a>
+        </th>
+
+    </tr>
+</table>
+<br>
+<a th:href="@{'/sinhvien/' + ${sv.msv}+'/monhoc'}" style="display: inline-block;
+                            width: 100px;
+                            height: 30px;
+                            line-height: 30px;
+                            text-align: center;
+                            background-color: #2e2e2e;
+                            color: white;
+                            text-decoration: none;
+                            border-radius: 5px;">Quay lại </a>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết sinh viên</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+
+</head>
+<body>
+<h1>Thông tin chi tiết <br>Sinh viên <span th:text="${sv.tensv}"></span></h1>
+<table border="1" cellpadding="5" class="table-center">
+    <tr>
+        <th>Mã SV</th>
+        <td th:text="${sv.msv}"></td>
+    </tr>
+    <tr>
+        <th>Tên SV</th>
+        <td th:text="${sv.tensv}"></td>
+    </tr>
+    <tr>
+        <th>Giới tính</th>
+        <td th:text="${sv.gioitinh}"></td>
+    </tr>
+    <tr>
+        <th>Ngày sinh</th>
+        <td th:text="${sv.ngaysinh}"></td>
+    </tr>
+    <tr>
+        <th>Lớp</th>
+        <td th:text="${sv.lop}"></td>
+    </tr>
+    <tr>
+        <th>Khoa</th>
+        <td th:text="${sv.khoa}"></td>
+    </tr>
+    <tr>
+        <th>
+            <a th:href="@{'/sinhvien/' + ${sv.msv}+'/monhoc'}"
+               style="display: inline-block;
+                            width: 100px;
+                            height: 30px;
+                            line-height: 30px;
+                            text-align: center;
+                            background-color: #6C6C6C;
+                            color: white;
+                            text-decoration: none;
+                            border-radius: 5px;"
+            >Xem môn học</a>
+        </th>
+    </tr>
+</table>
+
+<br>
+<a href="/sinhvien/" style="display: inline-block;
+                            width: 100px;
+                            height: 30px;
+                            line-height: 30px;
+                            text-align: center;
+                            background-color: #2e2e2e;
+                            color: white;
+                            text-decoration: none;
+                            border-radius: 5px;">
+    Quay lại
+</a>
+
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết sinh viên</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+<h1>Kết quả môn học <br>Sinh viên <span th:text="${sv.tensv}"></span></h1>
+<table border="1" cellpadding="5" class="table-center">
+    <tr>
+        <th >Môn học</th>
+        <th >Số tiết</th>
+        <th >Điểm QT</th>
+        <th >Điểm TP</th>
+        <th >Điểm tổng kết</th>
+        <th >Qua môn</th>
+
+    </tr>
+    <tr th:each="item : ${kq}">
+        <td  th:text="${item['tenMH']}"></td>
+        <td  th:text="${item['soTiet']}"></td>
+        <td  th:text="${item['diemQT']}"></td>
+        <td  th:text="${item['diemTP']}"></td>
+        <td style="font-weight: bold;" th:text="${item['diemTongKet']}"></td>
+        <td th:style="${item['quaMon']} == 'Đỗ' ? 'color:blue;' : 'color:red;'"
+            th:text="${item['quaMon']}"></td>
+
+    </tr>
+
+</table>
+<br>
+<a th:href="@{'/sinhvien/' + ${sv.msv}+'/diem'}" style="display: inline-block;
+                            width: 100px;
+                            height: 30px;
+                            line-height: 30px;
+                            text-align: center;
+                            background-color: #2e2e2e;
+                            color: white;
+                            text-decoration: none;
+                            border-radius: 5px;">Quay lại </a>
+</body>
+</html>
