@@ -6,7 +6,7 @@
     <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
-<h1>Kết quả môn học <br>Sinh viên <span th:text="${sv.tensv}"></span></h1>
+<h1>Kết quả môn học <br>Sinh viên <span th:text="${stu.stuName}"></span></h1>
 <table border="1" class="table-center">
     <tr>
         <th >Môn học</th>
@@ -17,20 +17,20 @@
         <th >Qua môn</th>
 
     </tr>
-    <tr th:each="item : ${kq}">
-        <td  th:text="${item['tenMH']}"></td>
-        <td  th:text="${item['soTiet']}"></td>
-        <td  th:text="${item['diemQT']}"></td>
-        <td  th:text="${item['diemTP']}"></td>
-        <td style="font-weight: bold;" th:text="${item['diemTongKet']}"></td>
-        <td th:style="${item['quaMon']} == 'Đỗ' ? 'color:blue;' : 'color:red;'"
-            th:text="${item['quaMon']}"></td>
+    <tr th:each="item : ${result}">
+        <td  th:text="${item['subName']}"></td>
+        <td  th:text="${item['subNum']}"></td>
+        <td  th:text="${item['processPoint']}"></td>
+        <td  th:text="${item['componentPoint']}"></td>
+        <td style="font-weight: bold;" th:text="${item['summaryScore']}"></td>
+        <td th:style="${item['passSub']} == 'Pass' ? 'color:blue;' : 'color:red;'"
+            th:text="${item['passSub']}"></td>
 
     </tr>
 
 </table>
 <br>
-<a th:href="@{'/sinhvien/' + ${sv.msv}+'/diem'}" style="display: inline-block;
+<a th:href="@{'/student/' + ${stu.stuCode}+'/score'}" style="display: inline-block;
                             width: 100px;
                             height: 30px;
                             line-height: 30px;

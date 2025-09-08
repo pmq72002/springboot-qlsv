@@ -2,25 +2,40 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Danh sách môn học của sinh viên</title>
+    <title>Chi tiết sinh viên</title>
     <link rel="stylesheet" th:href="@{/style.css}">
 
 </head>
 <body>
-<h1>Danh sách môn học <br>Sinh viên <span th:text="${sv.tensv}"></span></h1>
-
+<h1>Thông tin chi tiết <br>Sinh viên <span th:text="${stu.stuName}"></span></h1>
 <table border="1"  class="table-center">
     <tr>
-        <th scope="col">Tên môn học</th>
-        <th scope="col">Số tiết</th>
-    </tr>
-    <tr th:each="mh : ${list}">
-        <td th:text="${mh.tenMH}"></td>
-        <td th:text="${mh.soTiet}"></td>
+        <th>Mã SV</th>
+        <td th:text="${stu.stuCode}"></td>
     </tr>
     <tr>
-        <th scope="col">
-            <a th:href =" @{'/sinhvien/' + ${sv.msv}+'/diem'}"
+        <th>Tên SV</th>
+        <td th:text="${stu.stuName}"></td>
+    </tr>
+    <tr>
+        <th>Giới tính</th>
+        <td th:text="${stu.gender}"></td>
+    </tr>
+    <tr>
+        <th>Ngày sinh</th>
+        <td th:text="${stu.birth}"></td>
+    </tr>
+    <tr>
+        <th>Lớp</th>
+        <td th:text="${stu.classR}"></td>
+    </tr>
+    <tr>
+        <th>Khoa</th>
+        <td th:text="${stu.course}"></td>
+    </tr>
+    <tr>
+        <th>
+            <a th:href="@{'/student/' + ${stu.stuCode}+'/subject'}"
                style="display: inline-block;
                             width: 100px;
                             height: 30px;
@@ -30,13 +45,13 @@
                             color: white;
                             text-decoration: none;
                             border-radius: 5px;"
-            >Xem điểm</a>
+            >Xem môn học</a>
         </th>
     </tr>
 </table>
 
 <br>
-<a th:href="@{'/sinhvien/' + ${sv.msv}}" style="display: inline-block;
+<a href="/student/" style="display: inline-block;
                             width: 100px;
                             height: 30px;
                             line-height: 30px;
@@ -44,6 +59,10 @@
                             background-color: #2e2e2e;
                             color: white;
                             text-decoration: none;
-                            border-radius: 5px;">Quay lại</a>
+                            border-radius: 5px;">
+    Quay lại
+</a>
+
+
 </body>
 </html>

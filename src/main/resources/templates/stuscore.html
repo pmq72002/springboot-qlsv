@@ -7,7 +7,7 @@
 
 </head>
 <body>
-<h1>Thông tin điểm <br>Sinh viên <span th:text="${sv.tensv}"></span></h1>
+<h1>Thông tin điểm <br>Sinh viên <span th:text="${stu.stuName}"></span></h1>
 <table border="1" class="table-center">
     <tr>
         <th scope="col">Môn học</th>
@@ -16,15 +16,15 @@
         <th scope="col">Điểm TP</th>
         <th scope="col">Hành động</th>
     </tr>
-    <tr th:each="item : ${diem}">
-        <form th:action="@{|/sinhvien/${sv.msv}/diem/${item['maMH']}|}" method="post">
-            <td th:text="${item['tenMH']}"></td>
-            <td th:text="${item['soTiet']}"></td>
+    <tr th:each="item : ${score}">
+        <form th:action="@{|/student/${stu.stuCode}/score/${item['subCode']}|}" method="post">
+            <td th:text="${item['subName']}"></td>
+            <td th:text="${item['subNum']}"></td>
             <td>
-                <input type="number" name="diemQT" th:value="${item['diemQT']}" step="0.1" min="0" max="10"/>
+                <input type="number" name="processPoint" th:value="${item['processPoint']}" step="0.1" min="0" max="10"/>
             </td>
             <td>
-                <input type="number" name="diemTP" th:value="${item['diemTP']}" step="0.1" min="0" max="10"/>
+                <input type="number" name="componentPoint" th:value="${item['componentPoint']}" step="0.1" min="0" max="10"/>
             </td>
             <td>
                 <button type="submit"
@@ -46,7 +46,7 @@
 
     <tr>
         <th scope="col">
-            <a th:href="@{'/sinhvien/'+${sv.msv}+'/monhoc/tongket'}"
+            <a th:href="@{'/student/'+${stu.stuCode}+'/subject/summary'}"
                style="display: inline-block;
                             width: 180px;
                             height: 30px;
@@ -62,7 +62,7 @@
     </tr>
 </table>
 <br>
-<a th:href="@{'/sinhvien/' + ${sv.msv}+'/monhoc'}" style="display: inline-block;
+<a th:href="@{'/student/' + ${stu.stuCode}+'/subject'}" style="display: inline-block;
                             width: 100px;
                             height: 30px;
                             line-height: 30px;

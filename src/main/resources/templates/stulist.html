@@ -14,11 +14,11 @@
         <th>Tên SV</th>
         <th>Hành động</th>
     </tr>
-    <tr th:each="sv : ${sinhviens}">
-        <td th:text="${sv.msv}"></td>
-        <td th:text="${sv.tensv}"></td>
+    <tr th:each="stu : ${students}">
+        <td th:text="${stu.stuCode}"></td>
+        <td th:text="${stu.stuName}"></td>
         <td>
-            <a th:href="@{'/sinhvien/' + ${sv.msv}}"
+            <a th:href="@{'/student/' + ${stu.stuCode}}"
                style="display: inline-block;
                             width: 100px;
                             height: 30px;

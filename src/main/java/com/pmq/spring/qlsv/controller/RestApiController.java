@@ -1,10 +1,10 @@
 package com.pmq.spring.qlsv.controller;
 
 
-import com.pmq.spring.qlsv.constant.SinhVienSub;
+import com.pmq.spring.qlsv.constant.StudentSub;
 import com.pmq.spring.qlsv.model.*;
-import com.pmq.spring.qlsv.service.DiemService;
-import com.pmq.spring.qlsv.service.SinhVienService;
+import com.pmq.spring.qlsv.service.ScoreService;
+import com.pmq.spring.qlsv.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,125 +13,125 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @Controller
-@RequestMapping("/sinhvien")
+@RequestMapping("/student")
 public class RestApiController {
 
-    private SinhVienService sinhVienService;
+    private StudentService studentService;
 
-    private DiemService diemService;
+    private ScoreService scoreService;
     @Autowired
-    public RestApiController(SinhVienService sinhVienService, DiemService diemService) {
-        this.sinhVienService = sinhVienService;
-        this.diemService = diemService;
+    public RestApiController(StudentService studentService, ScoreService scoreService) {
+        this.studentService = studentService;
+        this.scoreService = scoreService;
     }
     
     //add sinh vien
     @PostMapping
-    public SinhVien createSinhVien(@RequestBody SinhVien sinhVien){
-        return sinhVienService.saveSinhVien(sinhVien);
+    public Student createStudent(@RequestBody Student student){
+        return studentService.saveStudent(student);
     }
 
     //1. xem danh sach sinh vien
     @GetMapping("/")
     public String getAllSinhVienLists(Model model){
-        List<SinhVienList> list = sinhVienService.getAllSinhVienList();
-        model.addAttribute("sinhviens", list);
-        return "svlist";
+        List<StudentList> list = studentService.getAllStudentList();
+        model.addAttribute("students", list);
+        return "stulist";
     }
 
 
     //2. xem thong tin 1 sv
-    @GetMapping("/{msv}")
-    public String getSinhVienById(@PathVariable String msv, Model model){
-        SinhVien sv = sinhVienService.getSinhVienById(msv);
-        model.addAttribute("sv", sv);
-        return "svdetails";
+    @GetMapping("/{stuCode}")
+    public String getStudentById(@PathVariable String stuCode, Model model){
+        Student stu = studentService.getStudentById(stuCode);
+        model.addAttribute("stu", stu);
+        return "studetails";
     }
 
 
     //3. xem so mon sinh vien dang ki
-    @GetMapping("/{msv}/monhoc")
-    public String getMonHocVaSinhVien(@PathVariable String msv, Model model){
-        List<Map<String,Object>> fullList = diemService.getMonHocVaSinhVien(msv);
-        SinhVien sv = sinhVienService.getSinhVienById(msv);
+    @GetMapping("/{stuCode}/subject")
+    public String getSubjectAndStudent(@PathVariable String stuCode, Model model){
+        List<Map<String,Object>> fullList = scoreService.getSubjectAndStudent(stuCode);
+        Student stu = studentService.getStudentById(stuCode);
 
         List<Map<String,Object>> result = fullList.stream().map(item -> {
             Map<String, Object> map = new LinkedHashMap<>();
-            map.put(SinhVienSub.MSV, item.get(SinhVienSub.MSV));
-            map.put(SinhVienSub.NAMESV, item.get(SinhVienSub.NAMESV));
-            map.put(SinhVienSub.NAMESUB, item.get(SinhVienSub.NAMESUB));
-            map.put(SinhVienSub.NUMSUB, item.get(SinhVienSub.NUMSUB));
+            map.put(StudentSub.STUCODE, item.get(StudentSub.STUCODE));
+            map.put(StudentSub.STUNAME, item.get(StudentSub.STUNAME));
+            map.put(StudentSub.SUBNAME, item.get(StudentSub.SUBNAME));
+            map.put(StudentSub.SUBNUM, item.get(StudentSub.SUBNUM));
             return map;
         }).toList();
         model.addAttribute("list",result);
-        model.addAttribute("sv", sv);
-        return "svsubject";
+        model.addAttribute("stu", stu);
+        return "stusubject";
     }
 
 
 
     //4. xem diem mon hoc cua sinh vien
-    @GetMapping("/{msv}/diem")
-    public String getDiem(@PathVariable String msv, Model model){
-        List<Map<String, Object>> diem = diemService.getMonHocVaSinhVien(msv);
-        SinhVien sv = sinhVienService.getSinhVienById(msv);
-        model.addAttribute("diem", diem);
-        model.addAttribute("sv", sv);
-        return "svscore";
+    @GetMapping("/{stuCode}/score")
+    public String getScore(@PathVariable String stuCode, Model model){
+        List<Map<String, Object>> score = scoreService.getSubjectAndStudent(stuCode);
+        Student stu = studentService.getStudentById(stuCode);
+        model.addAttribute("score", score);
+        model.addAttribute("stu", stu);
+        return "stuscore";
     }
 
     //5. Nhap diem cua sinh vien
-    @PostMapping("/{msv}/diem/{maMH}")
-    public String updateDiem(@PathVariable String msv,
-                             @PathVariable String maMH,
-                             @RequestParam Double diemQT,
-                             @RequestParam Double diemTP) {
-        Diem diem = new Diem();
-        diem.setDiemQT(diemQT);
-        diem.setDiemTP(diemTP);
+    @PostMapping("/{stuCode}/score/{subCode}")
+    public String updateScore(@PathVariable String stuCode,
+                             @PathVariable String subCode,
+                             @RequestParam Double processPoint,
+                             @RequestParam Double componentPoint) {
+        Score score = new Score();
+        score.setProcessPoint(processPoint);
+        score.setComponentPoint(componentPoint);
 
-        diemService.updateDiem(msv, maMH, diem);
+        scoreService.updateScore(stuCode, subCode, score);
 
-        return "redirect:/sinhvien/" + msv + "/diem";
+        return "redirect:/student/" + stuCode + "/score";
     }
 
     //6. Xem ket qua do truot cua sinh vien
-    @GetMapping("/{msv}/monhoc/tongket")
-    public String getDiemTongKet(@PathVariable String msv, Model model){
-        List<Diem> diemList = diemService.getDiemListBySinhVien(msv);
-        SinhVien sv = sinhVienService.getSinhVienById(msv);
-        List<Map<String,Object>> kq = diemList.stream().map(diem -> {
+    @GetMapping("/{stuCode}/subject/summary")
+    public String getSummaryScore(@PathVariable String stuCode, Model model){
+        List<Score> scoreList = scoreService.getScoreListByStudent(stuCode);
+        Student stu = studentService.getStudentById(stuCode);
+        List<Map<String,Object>> result = scoreList.stream().map(score -> {
             Map<String, Object> map = new LinkedHashMap<>();
-            map.put(SinhVienSub.MSV,diem.getSinhVien().getMsv());
-            map.put(SinhVienSub.NAMESV,diem.getSinhVien().getTensv());
-            map.put(SinhVienSub.NUMSUB,diem.getMonHoc().getSoTiet());
-            map.put(SinhVienSub.NAMESUB, diem.getMonHoc().getTenMH());
-            map.put(SinhVienSub.SCOREQT, diem.getDiemQT());
-            map.put(SinhVienSub.SCORETP, diem.getDiemTP());
+            map.put(StudentSub.STUCODE,score.getStudent().getStuCode());
+            map.put(StudentSub.STUNAME,score.getStudent().getStuName());
+            map.put(StudentSub.SUBNUM,score.getSubject().getSubNum());
+            map.put(StudentSub.SUBNAME, score.getSubject().getSubName());
+            map.put(StudentSub.PROCESSPOINT, score.getProcessPoint());
+            map.put(StudentSub.COMPONENTPOINT, score.getComponentPoint());
 
-            double diemTK = diemService.tinhDiemTongKet(diem);
-            map.put(SinhVienSub.SCORESUM, diemTK);
+            double summaryScore = scoreService.summaryScoreCal(score);
+            map.put(StudentSub.SUMMARYSCORE, summaryScore);
 
-            map.put(SinhVienSub.PASS, diemService.daQuaMon(diem) ? "Đỗ" : "Trượt");
+            map.put(StudentSub.PASSSUB, scoreService.passedSub(score) ? "Pass" : "Failed");
 
             return map;
         }).toList();
-        model.addAttribute("kq",kq);
-        model.addAttribute("sv", sv);
+        model.addAttribute("result",result);
+        model.addAttribute("stu", stu);
 
-        return "svpass";
+        return "stupass";
     }
 
 
     //edit sinh vien
-    @PutMapping("/{msv}")
-    public SinhVien updateSinhVien(@PathVariable String msv, @RequestBody SinhVien sinhVien){
-        return sinhVienService.updateSinhVien(msv, sinhVien);
+    @PutMapping("/{stuCode}")
+    public Student updateStudent(@PathVariable String stuCode, @RequestBody Student student){
+        return studentService.updateStudent(stuCode, student);
     }
     //xoa sinh vien
-    @DeleteMapping("/{msv}")
-    public String deleteSinhVien(@PathVariable String msv){
-        sinhVienService.deleteSinhVien(msv);
-        return "Delete sinh vien co msv = " +msv;
+    @DeleteMapping("/{stuCode}")
+    public String deleteStudent(@PathVariable String stuCode){
+        studentService.deleteStudent(stuCode);
+        return "Deleted student have stuCode = " +stuCode;
     }
 }
