@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
-@RequestMapping("/student")
+@RequestMapping("/api/student")
+
+
 public class RestApiController {
 
     private StudentService studentService;
@@ -91,7 +93,7 @@ public class RestApiController {
             double summaryScore = scoreService.summaryScoreCal(score);
             map.put(StudentSub.SUMMARYSCORE, summaryScore);
 
-            map.put(StudentSub.PASSSUB, scoreService.passedSub(score) ? "Pass" : "Failed");
+            map.put(StudentSub.PASSSUB, scoreService.passedSub(score) ? StudentSub.PASS : StudentSub.FAILED);
 
             return map;
         }).toList();

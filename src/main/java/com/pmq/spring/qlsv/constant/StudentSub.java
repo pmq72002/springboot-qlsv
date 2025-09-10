@@ -11,6 +11,9 @@ public class StudentSub {
     public  static final String COMPONENTPOINT = "componentPoint";
     public  static final String SUMMARYSCORE = "summaryScore";
     public  static final String PASSSUB = "passSub";
+    public static final String PASS = "Đỗ";
+    public static final String FAILED = "Trượt";
+
 
 
 }
