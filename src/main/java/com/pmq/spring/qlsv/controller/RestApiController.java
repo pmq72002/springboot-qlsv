@@ -3,8 +3,10 @@ package com.pmq.spring.qlsv.controller;
 
 import com.pmq.spring.qlsv.constant.StudentSub;
 import com.pmq.spring.qlsv.model.*;
+import com.pmq.spring.qlsv.response.ApiResponse;
 import com.pmq.spring.qlsv.service.ScoreService;
 import com.pmq.spring.qlsv.service.StudentService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,8 +28,10 @@ public class RestApiController {
     
     //add sinh vien
     @PostMapping("/create")
-    public Student createStudent(@RequestBody Student student){
-        return studentService.saveStudent(student);
+    ApiResponse<Student>  createStudent(@RequestBody @Valid Student student){
+        ApiResponse<Student> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(studentService.saveStudent(student));
+        return apiResponse;
     }
 
     //1. xem danh sach sinh vien

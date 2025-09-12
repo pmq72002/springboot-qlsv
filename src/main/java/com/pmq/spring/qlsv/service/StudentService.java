@@ -1,5 +1,7 @@
 package com.pmq.spring.qlsv.service;
 
+import com.pmq.spring.qlsv.exception.AppException;
+import com.pmq.spring.qlsv.exception.ErrorCode;
 import com.pmq.spring.qlsv.model.Student;
 import com.pmq.spring.qlsv.model.StudentList;
 import com.pmq.spring.qlsv.repository.StudentRepository;
@@ -30,10 +32,13 @@ public class StudentService {
     }
 
     public Student getStudentById(String msv){
-        return studentRepository.findById(msv).orElse(null);
+        return studentRepository.findById(msv)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
     }
     public Student saveStudent(Student student){
         student.setPassword(passwordEncoder.encode(student.getPassword()));
+        if (studentRepository.existsById(student.getStuCode()))
+            throw new AppException(ErrorCode.STUDENT_EXISTED);
         return studentRepository.save(student);
     }
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
