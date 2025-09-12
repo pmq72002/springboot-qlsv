@@ -15,4 +15,5 @@ public class Student {
     private String birth;
     private String classR;
     private String course;
+    private String password;
 }

@@ -13,7 +13,6 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/student")
 
-
 public class RestApiController {
 
     private StudentService studentService;
@@ -26,7 +25,7 @@ public class RestApiController {
     }
     
     //add sinh vien
-    @PostMapping
+    @PostMapping("/create")
     public Student createStudent(@RequestBody Student student){
         return studentService.saveStudent(student);
     }
@@ -111,4 +110,5 @@ public class RestApiController {
         studentService.deleteStudent(stuCode);
         return "Deleted student have stuCode = " +stuCode;
     }
+
 }
