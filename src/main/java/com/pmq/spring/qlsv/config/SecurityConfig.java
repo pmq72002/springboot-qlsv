@@ -1,5 +1,6 @@
 package com.pmq.spring.qlsv.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,7 +21,8 @@ public class SecurityConfig {
             "/api/auth/introspect",
             "/api/student/list"};
 
-    protected static final String SIGNER_KEY = "g41r5K803rCxW82cnRq5tQAuyICSgrVXY1GfDW84xjcy649QrGwsyQBDWlHLNYo6";
+    @Value("${jwt.signerKey}")
+    protected String signerKey;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -39,7 +41,7 @@ public class SecurityConfig {
 
     @Bean
     JwtDecoder jwtDecoder(){
-        SecretKeySpec secretKeySpec = new SecretKeySpec(SIGNER_KEY.getBytes(),"HS512");
+        SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(),"HS512");
         return NimbusJwtDecoder
                 .withSecretKey(secretKeySpec)
                 .macAlgorithm(MacAlgorithm.HS512)

@@ -15,6 +15,7 @@ import com.pmq.spring.qlsv.response.IntrospectResponse;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,14 +32,15 @@ public class AuthenticationService {
     private final StudentRepository studentRepository;
 
     @NonFinal
-    protected static final String SIGNER_KEY = "g41r5K803rCxW82cnRq5tQAuyICSgrVXY1GfDW84xjcy649QrGwsyQBDWlHLNYo6";
+    @Value("${jwt.signerKey}")
+    protected String signerKey;
 
 
     public IntrospectResponse introspect(IntrospectRequest request)
             throws ParseException, JOSEException {
         var token = request.getToken();
 
-        JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
+        JWSVerifier verifier = new MACVerifier(signerKey.getBytes());
 
         SignedJWT signedJWT = SignedJWT.parse(token);
 
@@ -91,7 +93,7 @@ public class AuthenticationService {
         JWSObject jwsObject = new JWSObject(header, payload);
 
         try {
-            jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes()));
+            jwsObject.sign(new MACSigner(signerKey.getBytes()));
             return jwsObject.serialize();
         }catch (JOSEException e){
             log.error("Cannot read token");
