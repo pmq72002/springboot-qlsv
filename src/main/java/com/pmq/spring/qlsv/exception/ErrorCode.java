@@ -11,7 +11,8 @@ public enum ErrorCode {
     COURSE_INVALID(1006, "Student's course invalid (at least 3 character)"),
     PASSWORD_INVALID(1007, "Password invalid (at least 8 character)"),
     STUDENT_NOT_EXISTED(1008, "Student not existed"),
-    UNAUTHENTICATED(1009, "Unauthenticated");
+    UNAUTHENTICATED(1009, "Unauthenticated"),
+    UNREAD_TOKEN(1010, "Can't read token");
 
 
 

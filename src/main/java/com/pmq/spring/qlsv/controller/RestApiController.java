@@ -35,7 +35,7 @@ public class RestApiController {
     }
 
     //1. xem danh sach sinh vien
-    @GetMapping("/")
+    @GetMapping("/list")
    public List<StudentList> getAllStudentList(){
         return studentService.getAllStudentList();
     }

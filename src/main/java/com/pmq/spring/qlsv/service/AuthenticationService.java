@@ -31,14 +31,14 @@ public class AuthenticationService {
     private final StudentRepository studentRepository;
 
     @NonFinal
-    protected static final String SINGER_KEY = "g41r5K803rCxW82cnRq5tQAuyICSgrVXY1GfDW84xjcy649QrGwsyQBDWlHLNYo6";
+    protected static final String SIGNER_KEY = "g41r5K803rCxW82cnRq5tQAuyICSgrVXY1GfDW84xjcy649QrGwsyQBDWlHLNYo6";
 
 
     public IntrospectResponse introspect(IntrospectRequest request)
             throws ParseException, JOSEException {
         var token = request.getToken();
 
-        JWSVerifier verifier = new MACVerifier(SINGER_KEY.getBytes());
+        JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
 
         SignedJWT signedJWT = SignedJWT.parse(token);
 
@@ -91,11 +91,11 @@ public class AuthenticationService {
         JWSObject jwsObject = new JWSObject(header, payload);
 
         try {
-            jwsObject.sign(new MACSigner(SINGER_KEY.getBytes()));
+            jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes()));
             return jwsObject.serialize();
         }catch (JOSEException e){
             log.error("Cannot read token");
-            throw new RuntimeException(e);
+            throw new AppException(ErrorCode.UNREAD_TOKEN);
         }
 
     }

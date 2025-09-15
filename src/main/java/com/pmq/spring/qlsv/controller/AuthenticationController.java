@@ -7,9 +7,6 @@ import com.pmq.spring.qlsv.response.ApiResponse;
 import com.pmq.spring.qlsv.response.AuthenticationResponse;
 import com.pmq.spring.qlsv.response.IntrospectResponse;
 import com.pmq.spring.qlsv.service.AuthenticationService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.text.ParseException;
 
 @RestController
-@RequestMapping("api/student/auth")
+@RequestMapping("api/auth")
 
 public class AuthenticationController {
 
