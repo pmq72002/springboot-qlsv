@@ -1,13 +1,14 @@
-package com.pmq.spring.qlsv.request;
+package com.pmq.spring.qlsv.dto.request;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthenticationRequest {
-    private String stuCode;
-    private String password;
+@Builder
+public class IntrospectRequest {
+    private String token;
 }

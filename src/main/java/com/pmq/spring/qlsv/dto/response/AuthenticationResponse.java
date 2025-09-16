@@ -1,4 +1,4 @@
-package com.pmq.spring.qlsv.request;
+package com.pmq.spring.qlsv.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,9 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class IntrospectRequest {
-    private String token;
+public class AuthenticationResponse {
+    String token;
+    private boolean authenticated;
 }

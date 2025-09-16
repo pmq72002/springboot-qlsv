@@ -2,24 +2,28 @@ package com.pmq.spring.qlsv.controller;
 
 
 import com.pmq.spring.qlsv.constant.StudentSub;
+import com.pmq.spring.qlsv.dto.response.StudentResponse;
 import com.pmq.spring.qlsv.model.*;
-import com.pmq.spring.qlsv.response.ApiResponse;
+import com.pmq.spring.qlsv.dto.response.ApiResponse;
 import com.pmq.spring.qlsv.service.ScoreService;
 import com.pmq.spring.qlsv.service.StudentService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/student")
 
 public class RestApiController {
 
-    private StudentService studentService;
+    private final StudentService studentService;
 
-    private ScoreService scoreService;
+    private final ScoreService scoreService;
     @Autowired
     public RestApiController(StudentService studentService, ScoreService scoreService) {
         this.studentService = studentService;
@@ -28,8 +32,8 @@ public class RestApiController {
     
     //add sinh vien
     @PostMapping("/create")
-    ApiResponse<Student>  createStudent(@RequestBody @Valid Student student){
-        ApiResponse<Student> apiResponse = new ApiResponse<>();
+    public ApiResponse<StudentResponse>  createStudent(@RequestBody @Valid Student student){
+        ApiResponse<StudentResponse > apiResponse = new ApiResponse<>();
         apiResponse.setResult(studentService.saveStudent(student));
         return apiResponse;
     }
@@ -37,13 +41,18 @@ public class RestApiController {
     //1. xem danh sach sinh vien
     @GetMapping("/list")
    public List<StudentList> getAllStudentList(){
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        log.info("stuCode: {}", authentication.getName());
+        authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
+
         return studentService.getAllStudentList();
     }
 
 
     //2. xem thong tin 1 sv
     @GetMapping("/{stuCode}")
-    public Student getStudentById(@PathVariable String stuCode){
+    public StudentResponse getStudentById(@PathVariable String stuCode){
         return  studentService.getStudentById(stuCode);
     }
 

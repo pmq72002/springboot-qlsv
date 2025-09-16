@@ -1,4 +1,4 @@
-package com.pmq.spring.qlsv.response;
+package com.pmq.spring.qlsv.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

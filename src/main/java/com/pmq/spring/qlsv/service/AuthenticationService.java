@@ -7,11 +7,12 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import com.pmq.spring.qlsv.exception.AppException;
 import com.pmq.spring.qlsv.exception.ErrorCode;
+import com.pmq.spring.qlsv.model.Student;
 import com.pmq.spring.qlsv.repository.StudentRepository;
-import com.pmq.spring.qlsv.request.AuthenticationRequest;
-import com.pmq.spring.qlsv.request.IntrospectRequest;
-import com.pmq.spring.qlsv.response.AuthenticationResponse;
-import com.pmq.spring.qlsv.response.IntrospectResponse;
+import com.pmq.spring.qlsv.dto.request.AuthenticationRequest;
+import com.pmq.spring.qlsv.dto.request.IntrospectRequest;
+import com.pmq.spring.qlsv.dto.response.AuthenticationResponse;
+import com.pmq.spring.qlsv.dto.response.IntrospectResponse;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.StringJoiner;
 
 @Slf4j
 @Service
@@ -68,7 +71,7 @@ public class AuthenticationService {
         if(!authenticated)
             throw new AppException(ErrorCode.UNAUTHENTICATED);
 
-        var token = generateToken(request.getStuCode());
+        var token = generateToken(student);
 
         return AuthenticationResponse.builder()
                 .token(token)
@@ -76,16 +79,17 @@ public class AuthenticationService {
                 .build();
     }
 
-    private String generateToken(String stuCode){
+    private String generateToken(Student student){
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-                .subject(stuCode)
+                .subject(student.getStuCode())
                 .issuer("pmqchez.com")
                 .issueTime(new Date())
                 .expirationTime(new Date(
                         Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()
                 ))
+                .claim("scope",buildScope(student))
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
@@ -100,5 +104,13 @@ public class AuthenticationService {
             throw new AppException(ErrorCode.UNREAD_TOKEN);
         }
 
+    }
+
+    private String buildScope(Student student){
+        StringJoiner stringJoiner = new StringJoiner(" ");
+        if(!CollectionUtils.isEmpty(student.getRoles()))
+            student.getRoles().forEach(stringJoiner::add);
+
+        return stringJoiner.toString();
     }
 }

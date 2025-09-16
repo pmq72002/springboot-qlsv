@@ -1,11 +1,11 @@
 package com.pmq.spring.qlsv.controller;
 
 import com.nimbusds.jose.JOSEException;
-import com.pmq.spring.qlsv.request.AuthenticationRequest;
-import com.pmq.spring.qlsv.request.IntrospectRequest;
-import com.pmq.spring.qlsv.response.ApiResponse;
-import com.pmq.spring.qlsv.response.AuthenticationResponse;
-import com.pmq.spring.qlsv.response.IntrospectResponse;
+import com.pmq.spring.qlsv.dto.request.AuthenticationRequest;
+import com.pmq.spring.qlsv.dto.request.IntrospectRequest;
+import com.pmq.spring.qlsv.dto.response.ApiResponse;
+import com.pmq.spring.qlsv.dto.response.AuthenticationResponse;
+import com.pmq.spring.qlsv.dto.response.IntrospectResponse;
 import com.pmq.spring.qlsv.service.AuthenticationService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

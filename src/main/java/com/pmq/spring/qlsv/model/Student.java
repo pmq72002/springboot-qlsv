@@ -2,11 +2,19 @@ package com.pmq.spring.qlsv.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "student")
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Student {
     @Id
     @Size(min=4, message = "Mã sinh viên ít nhất 4 ký tự")
@@ -24,4 +32,7 @@ public class Student {
     private String course;
     @Size(min = 8, message = "PASSWORD_INVALID")
     private String password;
+
+    private Set<String> roles;
+
 }
