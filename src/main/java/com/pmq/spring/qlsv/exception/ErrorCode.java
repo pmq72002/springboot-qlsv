@@ -12,8 +12,10 @@ public enum ErrorCode {
     PASSWORD_INVALID(1007, "Password invalid (at least 8 character)"),
     STUDENT_NOT_EXISTED(1008, "Student not existed"),
     UNAUTHENTICATED(1009, "Unauthenticated"),
-    UNREAD_TOKEN(1010, "Can't read token");
-
+    UNREAD_TOKEN(1010, "Can't read token"),
+    OLD_PASSWORD_INCORRECT(1011, "Old password incorrect"),
+    PASSWORD_NOT_MATCH(1012,"Password not match"),
+    STUDENT_NOT_FOUND(1013, "Student not found");
 
 
     ErrorCode(int code, String message) {

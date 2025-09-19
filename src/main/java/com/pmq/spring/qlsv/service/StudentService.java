@@ -79,19 +79,41 @@ public class StudentService {
                 saved.getRoles()
         );
     }
-    public Student updateStudent(String stuCode, Student studentDetails) {
+    public StudentResponse updateStudent(String stuCode, Student studentDetails) {
         return studentRepository.findById(stuCode).map(student -> {
             student.setStuName(studentDetails.getStuName());
             student.setGender(studentDetails.getGender());
             student.setBirth(studentDetails.getBirth());
             student.setClassR(studentDetails.getClassR());
             student.setCourse(studentDetails.getCourse());
-            student.setPassword(passwordEncoder.encode(studentDetails.getPassword()));
-            return studentRepository.save(student);
+            Student updated = studentRepository.save(student);
+
+
+            StudentResponse response = new StudentResponse();
+            response.setStuCode(updated.getStuCode());
+            response.setStuName(updated.getStuName());
+            response.setGender(updated.getGender());
+            response.setBirth(updated.getBirth());
+            response.setClassR(updated.getClassR());
+            response.setCourse(updated.getCourse());
+            response.setRoles(updated.getRoles());
+            return response;
         }).orElse(null);
     }
 
-
+    public StudentResponse changePasswordStudent(String stuCode, String oldPassword, String newPassword, String confirmPassword) {
+        return studentRepository.findById(stuCode).map(student -> {
+            if (!passwordEncoder.matches(oldPassword, student.getPassword())) {
+                throw new AppException(ErrorCode.OLD_PASSWORD_INCORRECT);
+            }
+            if (!newPassword.equals(confirmPassword)) {
+                throw new AppException(ErrorCode.PASSWORD_NOT_MATCH);
+            }
+            student.setPassword(passwordEncoder.encode(newPassword));
+            studentRepository.save(student);
+            return new StudentResponse(student);
+        }).orElseThrow(() -> new AppException(ErrorCode.STUDENT_NOT_FOUND)) ;
+    }
     public void deleteStudent(String stuCode){
         studentRepository.deleteById(stuCode);
     }

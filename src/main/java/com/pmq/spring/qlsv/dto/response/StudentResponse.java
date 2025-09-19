@@ -1,5 +1,6 @@
 package com.pmq.spring.qlsv.dto.response;
 
+import com.pmq.spring.qlsv.model.Student;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,4 +20,7 @@ public class StudentResponse {
     private String classR;
     private String course;
     private Set<String> roles;
+
+    public StudentResponse(Student student) {
+    }
 }

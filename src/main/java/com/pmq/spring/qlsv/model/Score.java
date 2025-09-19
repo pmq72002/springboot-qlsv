@@ -1,5 +1,6 @@
 package com.pmq.spring.qlsv.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,6 +17,7 @@ public class Score {
     @ManyToOne
     @MapsId("stuCode")
     @JoinColumn(name = "stuCode")
+    @JsonBackReference
     private Student student;
 
     @ManyToOne(fetch = FetchType.EAGER)

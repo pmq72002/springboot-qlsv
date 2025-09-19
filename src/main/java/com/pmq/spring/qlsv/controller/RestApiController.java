@@ -2,6 +2,7 @@ package com.pmq.spring.qlsv.controller;
 
 
 import com.pmq.spring.qlsv.constant.StudentSub;
+import com.pmq.spring.qlsv.dto.request.ChangePasswordRequest;
 import com.pmq.spring.qlsv.dto.response.StudentResponse;
 import com.pmq.spring.qlsv.model.*;
 import com.pmq.spring.qlsv.dto.response.ApiResponse;
@@ -120,15 +121,30 @@ public class RestApiController {
 
     //edit sinh vien
     @PutMapping("/{stuCode}")
-    public Student updateStudent(@PathVariable String stuCode, @RequestBody Student student){
-        return studentService.updateStudent(stuCode, student);
+    public ApiResponse<StudentResponse> updateStudent(@PathVariable String stuCode, @RequestBody Student student){
+        ApiResponse<StudentResponse> apiResponse = new ApiResponse<>();
+        StudentResponse updated =  studentService.updateStudent(stuCode, student);
+        apiResponse.setMessage("Cập nhật thông tin thành công");
+        apiResponse.setResult(updated);
+        return apiResponse;
+    }
+
+    //doi mat khau
+    @PutMapping("/{stuCode}/password")
+    public ApiResponse<StudentResponse> changePasswordStudent(@PathVariable String stuCode, @RequestBody @Valid ChangePasswordRequest request){
+        ApiResponse<StudentResponse> apiResponse = new ApiResponse<>();
+
+        StudentResponse updated =  studentService.changePasswordStudent(stuCode, request.getOldPassword(), request.getNewPassword(), request.getConfirmPassword());
+        apiResponse.setMessage("Đổi mật khẩu thành công");
+        apiResponse.setResult(updated);
+        return apiResponse;
     }
     //xoa sinh vien
     @DeleteMapping("/{stuCode}")
     public ResponseEntity<Map<String, String>> deleteStudent(@PathVariable String stuCode){
         studentService.deleteStudent(stuCode);
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Deleted student with stuCode = " + stuCode);
+        response.put("message", "Xóa thành công sinh viên có msv: " + stuCode);
         return ResponseEntity.ok(response);
     }
 

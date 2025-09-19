@@ -1,5 +1,6 @@
 package com.pmq.spring.qlsv.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -36,7 +37,9 @@ public class Student {
     private String password;
 
     private Set<String> roles;
+
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Score> scores = new ArrayList<>();
 
 
