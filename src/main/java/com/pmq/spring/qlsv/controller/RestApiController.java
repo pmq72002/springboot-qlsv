@@ -10,6 +10,7 @@ import com.pmq.spring.qlsv.service.StudentService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,10 @@ public class RestApiController {
     @PostMapping("/create")
     public ApiResponse<StudentResponse>  createStudent(@RequestBody @Valid Student student){
         ApiResponse<StudentResponse > apiResponse = new ApiResponse<>();
-        apiResponse.setResult(studentService.saveStudent(student));
+        StudentResponse saved = studentService.saveStudent(student);
+        apiResponse.setCode(1000);
+        apiResponse.setMessage("Tạo sinh viên thành công!"); // 👈 thêm message
+        apiResponse.setResult(saved);
         return apiResponse;
     }
 
@@ -121,9 +125,11 @@ public class RestApiController {
     }
     //xoa sinh vien
     @DeleteMapping("/{stuCode}")
-    public String deleteStudent(@PathVariable String stuCode){
+    public ResponseEntity<Map<String, String>> deleteStudent(@PathVariable String stuCode){
         studentService.deleteStudent(stuCode);
-        return "Deleted student have stuCode = " +stuCode;
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Deleted student with stuCode = " + stuCode);
+        return ResponseEntity.ok(response);
     }
 
 }

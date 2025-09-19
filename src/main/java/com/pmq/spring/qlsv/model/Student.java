@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -17,14 +19,14 @@ import java.util.Set;
 @NoArgsConstructor
 public class Student {
     @Id
-    @Size(min=4, message = "Mã sinh viên ít nhất 4 ký tự")
+    @Size(min = 4, message = "Mã sinh viên ít nhất 4 ký tự")
     private String stuCode;
 
-    @Size(min=8, message = "NAME_INVALID")
+    @Size(min = 8, message = "NAME_INVALID")
     private String stuName;
     @Size(min = 2, message = "GENDER_INVALID")
     private String gender;
-    @Size(min = 10,max = 10, message = "BIRTH_INVALID")
+    @Size(min = 10, max = 10, message = "BIRTH_INVALID")
     private String birth;
     @Size(min = 4, message = "CLASSR_INVALID")
     private String classR;
@@ -34,5 +36,8 @@ public class Student {
     private String password;
 
     private Set<String> roles;
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Score> scores = new ArrayList<>();
+
 
 }
