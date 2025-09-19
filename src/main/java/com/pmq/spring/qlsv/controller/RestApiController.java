@@ -10,6 +10,7 @@ import com.pmq.spring.qlsv.service.StudentService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +41,7 @@ public class RestApiController {
 
     //1. xem danh sach sinh vien
     @GetMapping("/list")
+    @PreAuthorize("hasRole('ADMIN')")
    public List<StudentList> getAllStudentList(){
         var authentication = SecurityContextHolder.getContext().getAuthentication();
 

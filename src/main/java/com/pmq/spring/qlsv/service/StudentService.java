@@ -10,8 +10,6 @@ import com.pmq.spring.qlsv.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,7 +33,7 @@ public class StudentService {
         return studentRepository.findAll();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    
     public List<StudentList> getAllStudentList(){
         log.info("IN method get List");
         return studentRepository.findAll()
@@ -44,7 +42,7 @@ public class StudentService {
                 .toList();
     }
 
-    @PostAuthorize("returnObject.stuCode == authentication.name")
+    
     public StudentResponse getStudentById(String stuCode){
         log.info("In method get student by ID");
         Student student = studentRepository.findById(stuCode)

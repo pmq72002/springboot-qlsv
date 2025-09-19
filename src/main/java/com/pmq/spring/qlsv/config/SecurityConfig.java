@@ -4,6 +4,7 @@ import com.pmq.spring.qlsv.enums.Role;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,29 +24,39 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-    private final String[] publicEndpoints = {
-            "/api/auth/log-in",
-            "/api/auth/introspect",
-    };
+
     private final String[] publicAdminEndpoints = {
             "/api/student/create",
-            "/api/student/list"
+            "/api/student/list",
     };
     private final String[] publicUserEndpoints = {
-            "/api/student",
+            "/api/student/*",
+            "/api/student/*/subject",
+            "/api/student/*/score",
     };
     @Value("${jwt.signerKey}")
     protected String signerKey;
 
+
     @Bean
+    @Order(1)
+    public SecurityFilterChain authEndpoints(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.securityMatcher("/api/auth/**")
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+        return httpSecurity.build();
+    }
+    @Bean
+    @Order(2)
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
+                .cors(cors -> {})
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(publicEndpoints).permitAll()
                         .requestMatchers(publicAdminEndpoints)
                         .hasRole(Role.ADMIN.name())
                         .requestMatchers(publicUserEndpoints)
-                        .hasRole(Role.USER.name())
+                        .hasAnyRole(Role.USER.name(), Role.ADMIN.name())
                         .anyRequest().authenticated()
                 );
 
