@@ -1,12 +1,16 @@
 package com.pmq.spring.qlsv.service;
 
 import com.pmq.spring.qlsv.dto.response.StudentResponse;
+import com.pmq.spring.qlsv.dto.response.SubjectResponse;
 import com.pmq.spring.qlsv.enums.Role;
 import com.pmq.spring.qlsv.exception.AppException;
 import com.pmq.spring.qlsv.exception.ErrorCode;
 import com.pmq.spring.qlsv.model.Student;
 import com.pmq.spring.qlsv.model.StudentList;
+import com.pmq.spring.qlsv.model.Subject;
+import com.pmq.spring.qlsv.model.SubjectList;
 import com.pmq.spring.qlsv.repository.StudentRepository;
+import com.pmq.spring.qlsv.repository.SubjectRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +27,12 @@ import java.util.List;
 public class StudentService {
     private PasswordEncoder passwordEncoder;
     private StudentRepository studentRepository;
+    private SubjectRepository subjectRepository;
     @Autowired
-    public StudentService(PasswordEncoder passwordEncoder, StudentRepository studentRepository){
+    public StudentService(PasswordEncoder passwordEncoder, StudentRepository studentRepository,SubjectRepository subjectRepository){
         this.passwordEncoder = passwordEncoder;
         this.studentRepository = studentRepository;
-    }
-
-    public List<Student> getAllSinhVien(){
-        return studentRepository.findAll();
+        this.subjectRepository = subjectRepository;
     }
 
     
@@ -38,7 +40,16 @@ public class StudentService {
         log.info("IN method get List");
         return studentRepository.findAll()
                 .stream()
+                .filter(sv -> sv.getRoles() == null
+                        || sv.getRoles().stream().noneMatch(r -> r.equals(Role.ADMIN.name())))
                 .map(sv -> new StudentList(sv.getStuCode(), sv.getStuName()))
+                .toList();
+    }
+
+    public List<SubjectList> getAllSubjectList() {
+        return subjectRepository.findAll()
+                .stream()
+                .map(sj -> new SubjectList(sj.getSubCode(), sj.getSubName(), sj.getSubNum()))
                 .toList();
     }
 
@@ -58,6 +69,24 @@ public class StudentService {
         dto.setRoles(student.getRoles());
         log.info("DEBUG >> DB stuCode={}, Auth.name={}", dto.getStuCode(), SecurityContextHolder.getContext().getAuthentication().getName());
         return dto;
+    }
+
+    public SubjectResponse saveSubject(Subject subject){
+        subject.setRatioProcess(0.3);
+        subject.setRatioComponent(0.7);
+
+        if(subjectRepository.existsById(subject.getSubCode()))
+            throw  new AppException(ErrorCode.SUBJECT_EXISTED);
+        if(subjectRepository.existsBySubName(subject.getSubName()))
+            throw new AppException(ErrorCode.SUBJECT_EXISTED);
+        Subject created = subjectRepository.save(subject);
+        return new SubjectResponse(
+                created.getSubCode(),
+                created.getSubName(),
+                created.getSubNum(),
+                created.getRatioProcess(),
+                created.getRatioComponent()
+        );
     }
     public StudentResponse saveStudent(Student student){
         student.setPassword(passwordEncoder.encode(student.getPassword()));

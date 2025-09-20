@@ -20,7 +20,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class Student {
     @Id
-    @Size(min = 4, message = "Mã sinh viên ít nhất 4 ký tự")
+    @Size(min = 4, message = "STUCODE_INVALID")
     private String stuCode;
 
     @Size(min = 8, message = "NAME_INVALID")

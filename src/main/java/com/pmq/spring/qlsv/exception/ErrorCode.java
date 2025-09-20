@@ -15,7 +15,10 @@ public enum ErrorCode {
     UNREAD_TOKEN(1010, "Can't read token"),
     OLD_PASSWORD_INCORRECT(1011, "Old password incorrect"),
     PASSWORD_NOT_MATCH(1012,"Password not match"),
-    STUDENT_NOT_FOUND(1013, "Student not found");
+    STUDENT_NOT_FOUND(1013, "Student not found"),
+    SUBJECT_EXISTED(1014,"Subject existed"),
+    STUCODE_INVALID(1015, "Mã sinh viên ít nhất 4 ký tự"),
+    SUBCODE_INVALID(1016,"Mã môn học ít nhất 3 ký tự");
 
 
     ErrorCode(int code, String message) {

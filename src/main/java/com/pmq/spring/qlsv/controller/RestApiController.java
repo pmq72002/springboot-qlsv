@@ -4,6 +4,7 @@ package com.pmq.spring.qlsv.controller;
 import com.pmq.spring.qlsv.constant.StudentSub;
 import com.pmq.spring.qlsv.dto.request.ChangePasswordRequest;
 import com.pmq.spring.qlsv.dto.response.StudentResponse;
+import com.pmq.spring.qlsv.dto.response.SubjectResponse;
 import com.pmq.spring.qlsv.model.*;
 import com.pmq.spring.qlsv.dto.response.ApiResponse;
 import com.pmq.spring.qlsv.service.ScoreService;
@@ -32,18 +33,30 @@ public class RestApiController {
         this.studentService = studentService;
         this.scoreService = scoreService;
     }
-    
+    //add mon hoc
+    @PostMapping("/subject/create")
+    public ApiResponse<SubjectResponse> createSubject(@RequestBody @Valid Subject subject){
+        ApiResponse<SubjectResponse> apiResponse = new ApiResponse<>();
+        SubjectResponse created = studentService.saveSubject(subject);
+        apiResponse.setMessage("Thêm môn học mới thành công");
+        apiResponse.setResult(created);
+        return apiResponse;
+    }
     //add sinh vien
     @PostMapping("/create")
     public ApiResponse<StudentResponse>  createStudent(@RequestBody @Valid Student student){
         ApiResponse<StudentResponse > apiResponse = new ApiResponse<>();
         StudentResponse saved = studentService.saveStudent(student);
         apiResponse.setCode(1000);
-        apiResponse.setMessage("Tạo sinh viên thành công!"); // 👈 thêm message
+        apiResponse.setMessage("Tạo sinh viên thành công!");
         apiResponse.setResult(saved);
         return apiResponse;
     }
-
+    // xem danh sach mon hoc
+    @GetMapping("/subject/list")
+    public List<SubjectList> getAllSubjectList(){
+        return studentService.getAllSubjectList();
+    }
     //1. xem danh sach sinh vien
     @GetMapping("/list")
     @PreAuthorize("hasRole('ADMIN')")
@@ -104,6 +117,7 @@ public class RestApiController {
             Map<String, Object> map = new LinkedHashMap<>();
             map.put(StudentSub.STUCODE,score.getStudent().getStuCode());
             map.put(StudentSub.STUNAME,score.getStudent().getStuName());
+            map.put(StudentSub.SUBCODE,score.getSubject().getSubCode());
             map.put(StudentSub.SUBNUM,score.getSubject().getSubNum());
             map.put(StudentSub.SUBNAME, score.getSubject().getSubName());
             map.put(StudentSub.PROCESSPOINT, score.getProcessPoint());
