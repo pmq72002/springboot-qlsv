@@ -132,7 +132,15 @@ public class RestApiController {
         }).toList();
     }
 
-
+    //edit mon hoc
+    @PutMapping("/subject/{subCode}")
+    public ApiResponse<SubjectResponse> updateSubject(@PathVariable String subCode, @RequestBody Subject subject){
+        ApiResponse<SubjectResponse> apiResponse = new ApiResponse<>();
+        SubjectResponse updated = studentService.updateSubject(subCode, subject);
+        apiResponse.setMessage("Cập nhật thông tin thành công");
+        apiResponse.setResult(updated);
+        return apiResponse;
+    }
     //edit sinh vien
     @PutMapping("/{stuCode}")
     public ApiResponse<StudentResponse> updateStudent(@PathVariable String stuCode, @RequestBody Student student){
@@ -152,6 +160,14 @@ public class RestApiController {
         apiResponse.setMessage("Đổi mật khẩu thành công");
         apiResponse.setResult(updated);
         return apiResponse;
+    }
+    // xoa mon hoc
+    @DeleteMapping("/subject/{subCode}")
+    public ResponseEntity<Map<String, String>> deleteSubject(@PathVariable String subCode){
+        studentService.deleteSubject(subCode);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Xóa thành công môn học có mã môn học: "+ subCode);
+        return ResponseEntity.ok(response);
     }
     //xoa sinh vien
     @DeleteMapping("/{stuCode}")

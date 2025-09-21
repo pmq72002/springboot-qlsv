@@ -108,6 +108,20 @@ public class StudentService {
                 saved.getRoles()
         );
     }
+
+    public SubjectResponse updateSubject(String subCode, Subject subjectDetails){
+        return subjectRepository.findById(subCode).map(subject -> {
+            subject.setSubName(subjectDetails.getSubName());
+            subject.setSubNum(subjectDetails.getSubNum());
+            Subject updated = subjectRepository.save(subject);
+
+            SubjectResponse response = new SubjectResponse();
+            response.setSubName(updated.getSubName());
+            response.setSubNum(updated.getSubNum());
+            return response;
+        }).orElseThrow(() -> new RuntimeException("Subject not found with code: " + subCode));
+    }
+
     public StudentResponse updateStudent(String stuCode, Student studentDetails) {
         return studentRepository.findById(stuCode).map(student -> {
             student.setStuName(studentDetails.getStuName());
@@ -142,6 +156,10 @@ public class StudentService {
             studentRepository.save(student);
             return new StudentResponse(student);
         }).orElseThrow(() -> new AppException(ErrorCode.STUDENT_NOT_FOUND)) ;
+    }
+
+    public void deleteSubject(String subCode){
+        subjectRepository.deleteById(subCode);
     }
     public void deleteStudent(String stuCode){
         studentRepository.deleteById(stuCode);
