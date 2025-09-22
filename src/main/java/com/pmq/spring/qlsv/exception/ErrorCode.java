@@ -18,7 +18,9 @@ public enum ErrorCode {
     STUDENT_NOT_FOUND(1013, "Student not found"),
     SUBJECT_EXISTED(1014,"Subject existed"),
     STUCODE_INVALID(1015, "Mã sinh viên ít nhất 4 ký tự"),
-    SUBCODE_INVALID(1016,"Mã môn học ít nhất 3 ký tự");
+    SUBCODE_INVALID(1016,"Mã môn học ít nhất 3 ký tự"),
+    SUBJECT_NOT_EXISTED(1014,"Subject not existed"),
+    ALREADY_REGISTER(1015, "Sinh viên đã đăng ký môn học này rồi");
 
 
     ErrorCode(int code, String message) {

@@ -86,6 +86,7 @@ public class RestApiController {
             Map<String, Object> map = new LinkedHashMap<>();
             map.put(StudentSub.STUCODE, item.get(StudentSub.STUCODE));
             map.put(StudentSub.STUNAME, item.get(StudentSub.STUNAME));
+            map.put(StudentSub.SUBCODE, item.get(StudentSub.SUBCODE));
             map.put(StudentSub.SUBNAME, item.get(StudentSub.SUBNAME));
             map.put(StudentSub.SUBNUM, item.get(StudentSub.SUBNUM));
             return map;
@@ -159,6 +160,15 @@ public class RestApiController {
         StudentResponse updated =  studentService.changePasswordStudent(stuCode, request.getOldPassword(), request.getNewPassword(), request.getConfirmPassword());
         apiResponse.setMessage("Đổi mật khẩu thành công");
         apiResponse.setResult(updated);
+        return apiResponse;
+    }
+    // dang ky mon hoc
+    @PostMapping("/{stuCode}/register/{subCode}")
+    public ApiResponse<Score> registerSubject(@PathVariable String stuCode, @PathVariable String subCode){
+        ApiResponse<Score> apiResponse = new ApiResponse<>();
+        Score score = scoreService.registerSubject(stuCode, subCode);
+        apiResponse.setMessage("Đăng ký môn học thành công");
+        apiResponse.setResult(score);
         return apiResponse;
     }
     // xoa mon hoc

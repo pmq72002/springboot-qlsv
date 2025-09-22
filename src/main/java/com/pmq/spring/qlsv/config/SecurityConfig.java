@@ -33,6 +33,7 @@ public class SecurityConfig {
             "/api/student/*",
             "/api/student/*/subject",
             "/api/student/*/score",
+            "/api/student/subject/*"
     };
     @Value("${jwt.signerKey}")
     protected String signerKey;
