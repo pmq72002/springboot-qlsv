@@ -27,12 +27,10 @@ import java.util.List;
 public class StudentService {
     private PasswordEncoder passwordEncoder;
     private StudentRepository studentRepository;
-    private SubjectRepository subjectRepository;
     @Autowired
-    public StudentService(PasswordEncoder passwordEncoder, StudentRepository studentRepository,SubjectRepository subjectRepository){
+    public StudentService(PasswordEncoder passwordEncoder, StudentRepository studentRepository){
         this.passwordEncoder = passwordEncoder;
         this.studentRepository = studentRepository;
-        this.subjectRepository = subjectRepository;
     }
 
     
@@ -46,14 +44,7 @@ public class StudentService {
                 .toList();
     }
 
-    public List<SubjectList> getAllSubjectList() {
-        return subjectRepository.findAll()
-                .stream()
-                .map(sj -> new SubjectList(sj.getSubCode(), sj.getSubName(), sj.getSubNum()))
-                .toList();
-    }
 
-    
     public StudentResponse getStudentById(String stuCode){
         log.info("In method get student by ID");
         Student student = studentRepository.findById(stuCode)
@@ -71,23 +62,7 @@ public class StudentService {
         return dto;
     }
 
-    public SubjectResponse saveSubject(Subject subject){
-        subject.setRatioProcess(0.3);
-        subject.setRatioComponent(0.7);
 
-        if(subjectRepository.existsById(subject.getSubCode()))
-            throw  new AppException(ErrorCode.SUBJECT_EXISTED);
-        if(subjectRepository.existsBySubName(subject.getSubName()))
-            throw new AppException(ErrorCode.SUBJECT_EXISTED);
-        Subject created = subjectRepository.save(subject);
-        return new SubjectResponse(
-                created.getSubCode(),
-                created.getSubName(),
-                created.getSubNum(),
-                created.getRatioProcess(),
-                created.getRatioComponent()
-        );
-    }
     public StudentResponse saveStudent(Student student){
         student.setPassword(passwordEncoder.encode(student.getPassword()));
         if (studentRepository.existsById(student.getStuCode()))
@@ -107,19 +82,6 @@ public class StudentService {
                 saved.getCourse(),
                 saved.getRoles()
         );
-    }
-
-    public SubjectResponse updateSubject(String subCode, Subject subjectDetails){
-        return subjectRepository.findById(subCode).map(subject -> {
-            subject.setSubName(subjectDetails.getSubName());
-            subject.setSubNum(subjectDetails.getSubNum());
-            Subject updated = subjectRepository.save(subject);
-
-            SubjectResponse response = new SubjectResponse();
-            response.setSubName(updated.getSubName());
-            response.setSubNum(updated.getSubNum());
-            return response;
-        }).orElseThrow(() -> new RuntimeException("Subject not found with code: " + subCode));
     }
 
     public StudentResponse updateStudent(String stuCode, Student studentDetails) {
@@ -158,9 +120,7 @@ public class StudentService {
         }).orElseThrow(() -> new AppException(ErrorCode.STUDENT_NOT_FOUND)) ;
     }
 
-    public void deleteSubject(String subCode){
-        subjectRepository.deleteById(subCode);
-    }
+
     public void deleteStudent(String stuCode){
         studentRepository.deleteById(stuCode);
     }

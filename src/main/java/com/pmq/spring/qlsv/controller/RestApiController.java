@@ -9,6 +9,7 @@ import com.pmq.spring.qlsv.model.*;
 import com.pmq.spring.qlsv.dto.response.ApiResponse;
 import com.pmq.spring.qlsv.service.ScoreService;
 import com.pmq.spring.qlsv.service.StudentService;
+import com.pmq.spring.qlsv.service.SubjectService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,18 +27,19 @@ import java.util.*;
 public class RestApiController {
 
     private final StudentService studentService;
-
+    private final SubjectService subjectService;
     private final ScoreService scoreService;
     @Autowired
-    public RestApiController(StudentService studentService, ScoreService scoreService) {
+    public RestApiController(StudentService studentService,SubjectService subjectService ,ScoreService scoreService) {
         this.studentService = studentService;
+        this.subjectService = subjectService;
         this.scoreService = scoreService;
     }
     //add mon hoc
     @PostMapping("/subject/create")
     public ApiResponse<SubjectResponse> createSubject(@RequestBody @Valid Subject subject){
         ApiResponse<SubjectResponse> apiResponse = new ApiResponse<>();
-        SubjectResponse created = studentService.saveSubject(subject);
+        SubjectResponse created = subjectService.saveSubject(subject);
         apiResponse.setMessage("Thêm môn học mới thành công");
         apiResponse.setResult(created);
         return apiResponse;
@@ -55,7 +57,7 @@ public class RestApiController {
     // xem danh sach mon hoc
     @GetMapping("/subject/list")
     public List<SubjectList> getAllSubjectList(){
-        return studentService.getAllSubjectList();
+        return subjectService.getAllSubjectList();
     }
     //1. xem danh sach sinh vien
     @GetMapping("/list")
@@ -137,7 +139,7 @@ public class RestApiController {
     @PutMapping("/subject/{subCode}")
     public ApiResponse<SubjectResponse> updateSubject(@PathVariable String subCode, @RequestBody Subject subject){
         ApiResponse<SubjectResponse> apiResponse = new ApiResponse<>();
-        SubjectResponse updated = studentService.updateSubject(subCode, subject);
+        SubjectResponse updated = subjectService.updateSubject(subCode, subject);
         apiResponse.setMessage("Cập nhật thông tin thành công");
         apiResponse.setResult(updated);
         return apiResponse;
@@ -174,7 +176,7 @@ public class RestApiController {
     // xoa mon hoc
     @DeleteMapping("/subject/{subCode}")
     public ResponseEntity<Map<String, String>> deleteSubject(@PathVariable String subCode){
-        studentService.deleteSubject(subCode);
+        subjectService.deleteSubject(subCode);
         Map<String, String> response = new HashMap<>();
         response.put("message", "Xóa thành công môn học có mã môn học: "+ subCode);
         return ResponseEntity.ok(response);
@@ -187,5 +189,4 @@ public class RestApiController {
         response.put("message", "Xóa thành công sinh viên có msv: " + stuCode);
         return ResponseEntity.ok(response);
     }
-
 }
