@@ -27,14 +27,15 @@ import java.util.List;
 public class StudentService {
     private PasswordEncoder passwordEncoder;
     private StudentRepository studentRepository;
+
     @Autowired
-    public StudentService(PasswordEncoder passwordEncoder, StudentRepository studentRepository){
+    public StudentService(PasswordEncoder passwordEncoder, StudentRepository studentRepository) {
         this.passwordEncoder = passwordEncoder;
         this.studentRepository = studentRepository;
     }
 
-    
-    public List<StudentList> getAllStudentList(){
+
+    public List<StudentList> getAllStudentList() {
         log.info("IN method get List");
         return studentRepository.findAll()
                 .stream()
@@ -45,7 +46,7 @@ public class StudentService {
     }
 
 
-    public StudentResponse getStudentById(String stuCode){
+    public StudentResponse getStudentById(String stuCode) {
         log.info("In method get student by ID");
         Student student = studentRepository.findById(stuCode)
                 .orElseThrow(() -> new AppException(ErrorCode.STUDENT_NOT_EXISTED));
@@ -63,7 +64,7 @@ public class StudentService {
     }
 
 
-    public StudentResponse saveStudent(Student student){
+    public StudentResponse saveStudent(Student student) {
         student.setPassword(passwordEncoder.encode(student.getPassword()));
         if (studentRepository.existsById(student.getStuCode()))
             throw new AppException(ErrorCode.STUDENT_EXISTED);
@@ -117,11 +118,11 @@ public class StudentService {
             student.setPassword(passwordEncoder.encode(newPassword));
             studentRepository.save(student);
             return new StudentResponse(student);
-        }).orElseThrow(() -> new AppException(ErrorCode.STUDENT_NOT_FOUND)) ;
+        }).orElseThrow(() -> new AppException(ErrorCode.STUDENT_NOT_FOUND));
     }
 
 
-    public void deleteStudent(String stuCode){
+    public void deleteStudent(String stuCode) {
         studentRepository.deleteById(stuCode);
     }
 }

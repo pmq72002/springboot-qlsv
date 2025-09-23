@@ -14,12 +14,12 @@ public enum ErrorCode {
     UNAUTHENTICATED(1009, "Unauthenticated"),
     UNREAD_TOKEN(1010, "Can't read token"),
     OLD_PASSWORD_INCORRECT(1011, "Old password incorrect"),
-    PASSWORD_NOT_MATCH(1012,"Password not match"),
+    PASSWORD_NOT_MATCH(1012, "Password not match"),
     STUDENT_NOT_FOUND(1013, "Student not found"),
-    SUBJECT_EXISTED(1014,"Subject existed"),
+    SUBJECT_EXISTED(1014, "Subject existed"),
     STUCODE_INVALID(1015, "Mã sinh viên ít nhất 4 ký tự"),
-    SUBCODE_INVALID(1016,"Mã môn học ít nhất 3 ký tự"),
-    SUBJECT_NOT_EXISTED(1014,"Subject not existed"),
+    SUBCODE_INVALID(1016, "Mã môn học ít nhất 3 ký tự"),
+    SUBJECT_NOT_EXISTED(1014, "Subject not existed"),
     ALREADY_REGISTER(1015, "Sinh viên đã đăng ký môn học này rồi");
 
 
@@ -27,6 +27,7 @@ public enum ErrorCode {
         this.code = code;
         this.message = message;
     }
+
     private int code;
     private String message;
 

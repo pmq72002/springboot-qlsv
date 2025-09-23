@@ -48,7 +48,7 @@ public class AuthenticationService {
         SignedJWT signedJWT = SignedJWT.parse(token);
 
         Date expiredTime = signedJWT.getJWTClaimsSet().getExpirationTime();
-        var verified =  signedJWT.verify(verifier);
+        var verified = signedJWT.verify(verifier);
 
         return IntrospectResponse.builder()
                 .valid(verified && expiredTime.after(new Date()))
@@ -58,17 +58,17 @@ public class AuthenticationService {
     }
 
     @Autowired
-    public AuthenticationService (StudentRepository studentRepository){
+    public AuthenticationService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request){
+    public AuthenticationResponse authenticate(AuthenticationRequest request) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         var student = studentRepository.findById(request.getStuCode())
                 .orElseThrow(() -> new AppException(ErrorCode.STUDENT_NOT_EXISTED));
         boolean authenticated = passwordEncoder.matches(request.getPassword(), student.getPassword());
 
-        if(!authenticated)
+        if (!authenticated)
             throw new AppException(ErrorCode.UNAUTHENTICATED);
 
         var token = generateToken(student);
@@ -79,7 +79,7 @@ public class AuthenticationService {
                 .build();
     }
 
-    private String generateToken(Student student){
+    private String generateToken(Student student) {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
@@ -89,7 +89,7 @@ public class AuthenticationService {
                 .expirationTime(new Date(
                         Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()
                 ))
-                .claim("scope",buildScope(student))
+                .claim("scope", buildScope(student))
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
@@ -99,16 +99,16 @@ public class AuthenticationService {
         try {
             jwsObject.sign(new MACSigner(signerKey.getBytes()));
             return jwsObject.serialize();
-        }catch (JOSEException e){
+        } catch (JOSEException e) {
             log.error("Cannot read token");
             throw new AppException(ErrorCode.UNREAD_TOKEN);
         }
 
     }
 
-    private String buildScope(Student student){
+    private String buildScope(Student student) {
         StringJoiner stringJoiner = new StringJoiner(" ");
-        if(!CollectionUtils.isEmpty(student.getRoles()))
+        if (!CollectionUtils.isEmpty(student.getRoles()))
             student.getRoles().forEach(stringJoiner::add);
 
         return stringJoiner.toString();

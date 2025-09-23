@@ -20,7 +20,7 @@ public class SubjectService {
     private SubjectRepository subjectRepository;
 
     @Autowired
-    public SubjectService(SubjectRepository subjectRepository){
+    public SubjectService(SubjectRepository subjectRepository) {
         this.subjectRepository = subjectRepository;
     }
 
@@ -31,13 +31,13 @@ public class SubjectService {
                 .toList();
     }
 
-    public SubjectResponse saveSubject(Subject subject){
+    public SubjectResponse saveSubject(Subject subject) {
         subject.setRatioProcess(0.3);
         subject.setRatioComponent(0.7);
 
-        if(subjectRepository.existsById(subject.getSubCode()))
-            throw  new AppException(ErrorCode.SUBJECT_EXISTED);
-        if(subjectRepository.existsBySubName(subject.getSubName()))
+        if (subjectRepository.existsById(subject.getSubCode()))
+            throw new AppException(ErrorCode.SUBJECT_EXISTED);
+        if (subjectRepository.existsBySubName(subject.getSubName()))
             throw new AppException(ErrorCode.SUBJECT_EXISTED);
         Subject created = subjectRepository.save(subject);
         return new SubjectResponse(
@@ -48,7 +48,8 @@ public class SubjectService {
                 created.getRatioComponent()
         );
     }
-    public SubjectResponse updateSubject(String subCode, Subject subjectDetails){
+
+    public SubjectResponse updateSubject(String subCode, Subject subjectDetails) {
         return subjectRepository.findById(subCode).map(subject -> {
             subject.setSubName(subjectDetails.getSubName());
             subject.setSubNum(subjectDetails.getSubNum());
@@ -60,7 +61,8 @@ public class SubjectService {
             return response;
         }).orElseThrow(() -> new RuntimeException("Subject not found with code: " + subCode));
     }
-    public void deleteSubject(String subCode){
+
+    public void deleteSubject(String subCode) {
         subjectRepository.deleteById(subCode);
     }
 }

@@ -15,7 +15,7 @@ import java.util.Optional;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
-    ResponseEntity<ApiResponse<Void>> handlingRuntimeException(RuntimeException exception){
+    ResponseEntity<ApiResponse<Void>> handlingRuntimeException(RuntimeException exception) {
         log.error("LOI LOI LOI: ", exception);
         ApiResponse<Void> apiResponse = new ApiResponse<>();
         apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = AppException.class)
-    ResponseEntity<ApiResponse<Void>> handlingException(AppException exception){
+    ResponseEntity<ApiResponse<Void>> handlingException(AppException exception) {
         ErrorCode errorCode = exception.getErrorCode();
         ApiResponse<Void> apiResponse = new ApiResponse<>();
         apiResponse.setCode(errorCode.getCode());
@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    ResponseEntity<ApiResponse<Void>> handlingValidation(MethodArgumentNotValidException exception){
+    ResponseEntity<ApiResponse<Void>> handlingValidation(MethodArgumentNotValidException exception) {
         String enumKey = Optional.ofNullable(exception.getFieldError())
                 .map(err -> err.getDefaultMessage())
                 .orElse("INVALID_ARGUMENT");
@@ -45,9 +45,9 @@ public class GlobalExceptionHandler {
         } catch (IllegalArgumentException e) {
             errorCode = ErrorCode.INVALID_ARGUMENT;
         }
-       ApiResponse<Void> apiResponse = new ApiResponse<>();
-       apiResponse.setCode(errorCode.getCode());
-       apiResponse.setMessage(errorCode.getMessage());
+        ApiResponse<Void> apiResponse = new ApiResponse<>();
+        apiResponse.setCode(errorCode.getCode());
+        apiResponse.setMessage(errorCode.getMessage());
 
         return ResponseEntity.badRequest().body(apiResponse);
     }

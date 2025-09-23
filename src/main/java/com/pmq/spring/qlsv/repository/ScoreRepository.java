@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface ScoreRepository extends JpaRepository<Score, ScoreId> {
-List<Score> findByStudent_stuCode(String stuCode);
+    List<Score> findByStudent_stuCode(String stuCode);
 }

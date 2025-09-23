@@ -23,8 +23,9 @@ public class ScoreService {
     private final ScoreRepository scoreRepository;
     private final StudentRepository studentRepository;
     private SubjectRepository subjectRepository;
+
     @Autowired
-    public ScoreService(ScoreRepository scoreRepository, StudentRepository studentRepository, SubjectRepository subjectRepository){
+    public ScoreService(ScoreRepository scoreRepository, StudentRepository studentRepository, SubjectRepository subjectRepository) {
         this.scoreRepository = scoreRepository;
         this.studentRepository = studentRepository;
         this.subjectRepository = subjectRepository;
@@ -33,6 +34,7 @@ public class ScoreService {
     public List<Score> getScoreListByStudent(String stuCode) {
         return scoreRepository.findByStudent_stuCode(stuCode);
     }
+
     public List<Map<String, Object>> getSubjectAndStudent(String stuCode) {
         List<Score> scoreList = scoreRepository.findByStudent_stuCode(stuCode);
 
@@ -49,7 +51,7 @@ public class ScoreService {
         }).toList();
     }
 
-    public Score registerSubject(String stuCode, String subCode){
+    public Score registerSubject(String stuCode, String subCode) {
         Student student = studentRepository.findById(stuCode)
                 .orElseThrow(() -> new AppException(ErrorCode.STUDENT_NOT_EXISTED));
         Subject subject = subjectRepository.findById(subCode)
@@ -57,7 +59,7 @@ public class ScoreService {
 
         ScoreId scoreId = new ScoreId(stuCode, subCode);
 
-        if(scoreRepository.existsById(scoreId)){
+        if (scoreRepository.existsById(scoreId)) {
             throw new AppException(ErrorCode.ALREADY_REGISTER);
         }
 
@@ -82,12 +84,14 @@ public class ScoreService {
         // Làm tròn 2 chữ số
         return Math.round(summaryScore * 100.0) / 100.0;
     }
+
     public boolean passedSub(Score score) {
         return summaryScoreCal(score) >= 4.0;
     }
-    public Score updateScore(String stuCode,String subCode, Score scoreDetails) {
+
+    public Score updateScore(String stuCode, String subCode, Score scoreDetails) {
         ScoreId id = new ScoreId(stuCode, subCode);
-        return scoreRepository.findById(id).map(score ->{
+        return scoreRepository.findById(id).map(score -> {
             score.setProcessPoint(scoreDetails.getProcessPoint());
             score.setComponentPoint(scoreDetails.getComponentPoint());
             return scoreRepository.saveAndFlush(score);

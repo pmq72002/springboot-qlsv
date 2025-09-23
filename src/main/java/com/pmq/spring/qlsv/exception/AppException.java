@@ -1,6 +1,9 @@
 package com.pmq.spring.qlsv.exception;
 
-public class AppException extends RuntimeException{
+import lombok.Getter;
+
+@Getter
+public class AppException extends RuntimeException {
 
     public AppException(ErrorCode errorCode) {
         super(errorCode.getMessage());
@@ -8,9 +11,5 @@ public class AppException extends RuntimeException{
     }
 
     private final ErrorCode errorCode;
-
-    public ErrorCode getErrorCode() {
-        return errorCode;
-    }
 
 }
