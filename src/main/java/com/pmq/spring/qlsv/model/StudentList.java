@@ -3,9 +3,11 @@ package com.pmq.spring.qlsv.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Setter
 @Getter
-public class StudentList {
+public class StudentList  implements Serializable {
     private String stuCode;
     private String stuName;
 

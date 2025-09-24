@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -18,7 +19,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Student {
+public class Student implements Serializable {
     @Id
     @Size(min = 4, message = "STUCODE_INVALID")
     private String stuCode;
@@ -40,7 +41,7 @@ public class Student {
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private List<Score> scores = new ArrayList<>();
+    private static List<Score> scores = new ArrayList<>();
 
 
 }

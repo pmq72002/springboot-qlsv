@@ -9,6 +9,7 @@ import com.pmq.spring.qlsv.service.StudentService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,6 +34,7 @@ public class StudentController {
 
     //add sinh vien
     @PostMapping("/create")
+    @CacheEvict(value = "allStudents", allEntries = true)
     public ApiResponse<StudentResponse> createStudent(@RequestBody @Valid Student student) {
         ApiResponse<StudentResponse> apiResponse = new ApiResponse<>();
         StudentResponse saved = studentService.saveStudent(student);
@@ -50,7 +52,6 @@ public class StudentController {
 
         log.info("stuCode: {}", authentication.getName());
         authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
-
         return studentService.getAllStudentList();
     }
 

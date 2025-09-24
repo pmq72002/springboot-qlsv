@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 7.0.3.final -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="demo1" language="java" pageWidth="595" pageHeight="842" columnWidth="555"
+              leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter1.jrdax"/>
+
+    <queryString language="sql">
+        <![CDATA[
+        SELECT s.stuCode, s.stuName, sub.subName, sc.processPoint, sc.componentPoint
+        FROM student s
+        JOIN score sc ON s.stuCode = sc.stuCode
+        JOIN subject sub ON sub.subCode = sc.subCode
+        ]]>
+    </queryString>
+
+    <field name="stuCode" class="java.lang.String"/>
+    <field name="stuName" class="java.lang.String"/>
+    <field name="subName" class="java.lang.String"/>
+    <field name="processPoint" class="java.lang.Double"/>
+    <field name="componentPoint" class="java.lang.Double"/>
+
+    <background/>
+    <title/>
+    <pageHeader/>
+
+    <!-- Column Header -->
+    <columnHeader>
+        <band height="30">
+            <staticText>
+                <reportElement x="0" y="0" width="50" height="20"/>
+                <text><![CDATA[Mã SV]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="110" y="0" width="80" height="20"/>
+                <text><![CDATA[Tên SV]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="220" y="0" width="80" height="20"/>
+                <text><![CDATA[Tên MH]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="330" y="0" width="80" height="20"/>
+                <text><![CDATA[Diem QT]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="440" y="0" width="80" height="20"/>
+                <text><![CDATA[Diem TP]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+
+    <!-- Detail rows -->
+    <detail>
+        <band height="20">
+            <textField>
+                <reportElement x="0" y="0" width="75" height="20"/>
+                <textFieldExpression><![CDATA[$F{stuCode}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="110" y="0" width="80" height="20"/>
+                <textFieldExpression><![CDATA[$F{stuName}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="220" y="0" width="80" height="20"/>
+                <textFieldExpression><![CDATA[$F{subName}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="330" y="0" width="80" height="20"/>
+                <textFieldExpression><![CDATA[$F{processPoint}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="440" y="0" width="80" height="20"/>
+                <textFieldExpression><![CDATA[$F{componentPoint}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+    <columnFooter/>
+    <pageFooter/>
+    <summary/>
+</jasperReport>

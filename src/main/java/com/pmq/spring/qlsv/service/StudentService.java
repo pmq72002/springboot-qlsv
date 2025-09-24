@@ -1,19 +1,16 @@
 package com.pmq.spring.qlsv.service;
 
 import com.pmq.spring.qlsv.dto.response.StudentResponse;
-import com.pmq.spring.qlsv.dto.response.SubjectResponse;
 import com.pmq.spring.qlsv.enums.Role;
 import com.pmq.spring.qlsv.exception.AppException;
 import com.pmq.spring.qlsv.exception.ErrorCode;
 import com.pmq.spring.qlsv.model.Student;
 import com.pmq.spring.qlsv.model.StudentList;
-import com.pmq.spring.qlsv.model.Subject;
-import com.pmq.spring.qlsv.model.SubjectList;
 import com.pmq.spring.qlsv.repository.StudentRepository;
-import com.pmq.spring.qlsv.repository.SubjectRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,9 +31,10 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
-
+    @Cacheable("allStudents")
     public List<StudentList> getAllStudentList() {
         log.info("IN method get List");
+        log.info("⏳ Querying DB...");
         return studentRepository.findAll()
                 .stream()
                 .filter(sv -> sv.getRoles() == null
