@@ -1,19 +1,20 @@
 package com.pmq.spring.qlsv.dto.response;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Data
-public class SubjectResponse {
+public class ScoreSummaryResponse {
+    private String stuCode;
+    private String stuName;
     private String subCode;
     private String subName;
     private Integer subNum;
-    private Double ratioProcess;
-    private Double ratioComponent;
-
-}
+    private Double processPoint;
+    private Double componentPoint;
+    private Double summaryScore;
+    private String passStatus;
+  }

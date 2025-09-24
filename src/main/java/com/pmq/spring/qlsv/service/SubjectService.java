@@ -9,6 +9,7 @@ import com.pmq.spring.qlsv.repository.SubjectRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +25,10 @@ public class SubjectService {
         this.subjectRepository = subjectRepository;
     }
 
+    @Cacheable("allSubjects")
     public List<SubjectList> getAllSubjectList() {
+        log.info("IN method get Subject List");
+        log.info("⏳ Querying DB...");
         return subjectRepository.findAll()
                 .stream()
                 .map(sj -> new SubjectList(sj.getSubCode(), sj.getSubName(), sj.getSubNum()))

@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "subject")
 @Data
-public class Subject {
+public class Subject implements Serializable {
     @Id
     @Size(min = 3, message = "SUBCODE_INVALID")
     private String subCode;

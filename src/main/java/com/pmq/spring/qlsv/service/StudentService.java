@@ -33,7 +33,7 @@ public class StudentService {
 
     @Cacheable("allStudents")
     public List<StudentList> getAllStudentList() {
-        log.info("IN method get List");
+        log.info("IN method get Student List");
         log.info("⏳ Querying DB...");
         return studentRepository.findAll()
                 .stream()
@@ -45,7 +45,7 @@ public class StudentService {
 
 
     public StudentResponse getStudentById(String stuCode) {
-        log.info("In method get student by ID");
+        log.info("------student by id------");
         Student student = studentRepository.findById(stuCode)
                 .orElseThrow(() -> new AppException(ErrorCode.STUDENT_NOT_EXISTED));
 
@@ -57,7 +57,7 @@ public class StudentService {
         dto.setClassR(student.getClassR());
         dto.setCourse(student.getCourse());
         dto.setRoles(student.getRoles());
-        log.info("DEBUG >> DB stuCode={}, Auth.name={}", dto.getStuCode(), SecurityContextHolder.getContext().getAuthentication().getName());
+        log.info(" DB stuCode={}, Auth.name={}", dto.getStuCode(), SecurityContextHolder.getContext().getAuthentication().getName());
         return dto;
     }
 
@@ -112,6 +112,9 @@ public class StudentService {
             }
             if (!newPassword.equals(confirmPassword)) {
                 throw new AppException(ErrorCode.PASSWORD_NOT_MATCH);
+            }
+            if (newPassword.length()<8){
+                throw  new AppException(ErrorCode.PASSWORD_INVALID);
             }
             student.setPassword(passwordEncoder.encode(newPassword));
             studentRepository.save(student);

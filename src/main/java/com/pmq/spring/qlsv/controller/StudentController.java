@@ -10,14 +10,10 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -47,19 +43,29 @@ public class StudentController {
     // xem danh sach sinh vien
     @GetMapping("/list")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<StudentList> getAllStudentList() {
+    public ApiResponse<List<StudentList>> getAllStudentList() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
-
+        log.info("------student list------");
         log.info("stuCode: {}", authentication.getName());
-        authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
-        return studentService.getAllStudentList();
+        authentication.getAuthorities()
+                .forEach(grantedAuthority ->
+                        log.info("role: "+grantedAuthority.getAuthority()));
+        List<StudentList> students = studentService.getAllStudentList();
+        ApiResponse<List<StudentList>> apiResponse = new ApiResponse<>();
+        apiResponse.setMessage("Lấy danh sách sinh viên thành công");
+        apiResponse.setResult(students);
+        return apiResponse;
     }
 
 
     //xem thong tin 1 sv
     @GetMapping("/{stuCode}")
-    public StudentResponse getStudentById(@PathVariable String stuCode) {
-        return studentService.getStudentById(stuCode);
+    public ApiResponse<StudentResponse> getStudentById(@PathVariable String stuCode) {
+        StudentResponse student = studentService.getStudentById(stuCode);
+        ApiResponse<StudentResponse> apiResponse = new ApiResponse<>();
+        apiResponse.setMessage("Lấy thông tin sinh viên: "+stuCode);
+        apiResponse.setResult(student);
+        return apiResponse;
     }
 
 
@@ -87,10 +93,11 @@ public class StudentController {
 
     //xoa sinh vien
     @DeleteMapping("/{stuCode}")
-    public ResponseEntity<Map<String, String>> deleteStudent(@PathVariable String stuCode) {
+    @CacheEvict(value = "allStudents", allEntries = true)
+    public ApiResponse<Void> deleteStudent(@PathVariable String stuCode) {
         studentService.deleteStudent(stuCode);
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "Xóa thành công sinh viên có msv: " + stuCode);
-        return ResponseEntity.ok(response);
+        ApiResponse<Void> apiResponse = new ApiResponse<>();
+        apiResponse.setMessage("Xóa thành công sinh viên: ");
+        return apiResponse;
     }
 }

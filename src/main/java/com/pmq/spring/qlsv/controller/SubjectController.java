@@ -2,6 +2,7 @@ package com.pmq.spring.qlsv.controller;
 
 import com.pmq.spring.qlsv.constant.StudentSub;
 import com.pmq.spring.qlsv.dto.response.ApiResponse;
+import com.pmq.spring.qlsv.dto.response.SubjectOfStudentResponse;
 import com.pmq.spring.qlsv.dto.response.SubjectResponse;
 import com.pmq.spring.qlsv.model.Score;
 import com.pmq.spring.qlsv.model.Subject;
@@ -11,10 +12,8 @@ import com.pmq.spring.qlsv.service.SubjectService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +33,7 @@ public class SubjectController {
 
     //add mon hoc
     @PostMapping("/subject/create")
+    @CacheEvict(value = "allSubjects", allEntries = true)
     public ApiResponse<SubjectResponse> createSubject(@RequestBody @Valid Subject subject) {
         ApiResponse<SubjectResponse> apiResponse = new ApiResponse<>();
         SubjectResponse created = subjectService.saveSubject(subject);
@@ -44,30 +44,23 @@ public class SubjectController {
 
     // xem danh sach mon hoc
     @GetMapping("/subject/list")
-    public List<SubjectList> getAllSubjectList() {
-        return subjectService.getAllSubjectList();
+    public ApiResponse<List<SubjectList>> getAllSubjectList() {
+        log.info("------subject list------");
+        List<SubjectList> subjects = subjectService.getAllSubjectList();
+        ApiResponse<List<SubjectList>> apiResponse = new ApiResponse<>();
+        apiResponse.setMessage("Lấy danh sách môn học thành công");
+        apiResponse.setResult(subjects);
+        return apiResponse;
     }
 
     // xem so mon sinh vien dang ki
     @GetMapping("/{stuCode}/subject")
-    public List<Map<String, Object>> getSubjectAndStudent(@PathVariable String stuCode) {
-        List<Map<String, Object>> fullList = scoreService.getSubjectAndStudent(stuCode);
-
-        return fullList.stream().map(item -> {
-            Map<String, Object> map = new LinkedHashMap<>();
-            map.put(StudentSub.STUCODE, item.get(StudentSub.STUCODE));
-            map.put(StudentSub.STUNAME, item.get(StudentSub.STUNAME));
-            map.put(StudentSub.SUBCODE, item.get(StudentSub.SUBCODE));
-            map.put(StudentSub.SUBNAME, item.get(StudentSub.SUBNAME));
-            map.put(StudentSub.SUBNUM, item.get(StudentSub.SUBNUM));
-            return map;
-        }).toList();
-    }
-
-    // xem diem mon hoc cua sinh vien
-    @GetMapping("/{stuCode}/score")
-    public List<Map<String, Object>> getScore(@PathVariable String stuCode) {
-        return scoreService.getSubjectAndStudent(stuCode);
+    public ApiResponse<List<SubjectOfStudentResponse>> getSubjectAndStudent(@PathVariable String stuCode) {
+        log.info("------subject student------");
+        return ApiResponse.<List<SubjectOfStudentResponse>>builder()
+                .result(scoreService.getSubjectAndStudent(stuCode))
+                .message("Lấy môn học của sinh viên thành công")
+                .build();
     }
 
     //edit mon hoc
@@ -92,10 +85,10 @@ public class SubjectController {
 
     // xoa mon hoc
     @DeleteMapping("/subject/{subCode}")
-    public ResponseEntity<Map<String, String>> deleteSubject(@PathVariable String subCode) {
-        subjectService.deleteSubject(subCode);
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "Xóa thành công môn học có mã môn học: " + subCode);
-        return ResponseEntity.ok(response);
+    @CacheEvict(value = "allSubjects", allEntries = true)
+    public ApiResponse<Void> deleteSubject(@PathVariable String subCode) {
+        ApiResponse<Void> apiResponse = new ApiResponse<>();
+        apiResponse.setMessage("Xóa thành công môn học: ");
+        return apiResponse;
     }
 }

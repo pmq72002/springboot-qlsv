@@ -1,6 +1,8 @@
 package com.pmq.spring.qlsv.service;
 
 import com.pmq.spring.qlsv.constant.StudentSub;
+import com.pmq.spring.qlsv.dto.response.ScoreSummaryResponse;
+import com.pmq.spring.qlsv.dto.response.SubjectOfStudentResponse;
 import com.pmq.spring.qlsv.exception.AppException;
 import com.pmq.spring.qlsv.exception.ErrorCode;
 import com.pmq.spring.qlsv.model.Score;
@@ -12,17 +14,14 @@ import com.pmq.spring.qlsv.repository.StudentRepository;
 import com.pmq.spring.qlsv.repository.SubjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class ScoreService {
 
     private final ScoreRepository scoreRepository;
     private final StudentRepository studentRepository;
-    private SubjectRepository subjectRepository;
+    private final SubjectRepository subjectRepository;
 
     @Autowired
     public ScoreService(ScoreRepository scoreRepository, StudentRepository studentRepository, SubjectRepository subjectRepository) {
@@ -31,24 +30,37 @@ public class ScoreService {
         this.subjectRepository = subjectRepository;
     }
 
-    public List<Score> getScoreListByStudent(String stuCode) {
-        return scoreRepository.findByStudent_stuCode(stuCode);
+    public List<ScoreSummaryResponse> getScoreListByStudent(String stuCode) {
+        List<Score> scoreList = scoreRepository.findByStudent_stuCode(stuCode);
+        return scoreList.stream().map(score -> {
+            double summaryScore = summaryScoreCal(score);
+            String passStatus = passedSub(score) ? StudentSub.PASS : StudentSub.FAILED;
+            return new ScoreSummaryResponse(
+                    score.getStudent().getStuCode(),
+                    score.getStudent().getStuName(),
+                    score.getSubject().getSubCode(),
+                    score.getSubject().getSubName(),
+                    score.getSubject().getSubNum(),
+                    score.getProcessPoint(),
+                    score.getComponentPoint(),
+                    summaryScore,
+                    passStatus
+            );
+        }).toList();
     }
 
-    public List<Map<String, Object>> getSubjectAndStudent(String stuCode) {
+
+    public List<SubjectOfStudentResponse> getSubjectAndStudent(String stuCode) {
         List<Score> scoreList = scoreRepository.findByStudent_stuCode(stuCode);
 
-        return scoreList.stream().map(score -> {
-            Map<String, Object> map = new LinkedHashMap<>();
-            map.put(StudentSub.STUCODE, score.getStudent().getStuCode());
-            map.put(StudentSub.SUBCODE, score.getSubject().getSubCode());
-            map.put(StudentSub.STUNAME, score.getStudent().getStuName());
-            map.put(StudentSub.SUBNAME, score.getSubject().getSubName());
-            map.put(StudentSub.SUBNUM, score.getSubject().getSubNum());
-            map.put(StudentSub.PROCESSPOINT, score.getProcessPoint());
-            map.put(StudentSub.COMPONENTPOINT, score.getComponentPoint());
-            return map;
-        }).toList();
+        return scoreList.stream().map(score ->
+            new SubjectOfStudentResponse(
+                    score.getStudent().getStuCode(),
+                    score.getStudent().getStuName(),
+                    score.getSubject().getSubCode(),
+                    score.getSubject().getSubName(),
+                    score.getSubject().getSubNum()
+            )).toList();
     }
 
     public Score registerSubject(String stuCode, String subCode) {

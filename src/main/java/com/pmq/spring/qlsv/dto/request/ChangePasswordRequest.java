@@ -1,5 +1,6 @@
 package com.pmq.spring.qlsv.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,12 +12,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ChangePasswordRequest {
-    @Size(min = 8, message = "OLD_PASSWORD_INVALID")
+    @Size(min = 8, message = "PASSWORD_INVALID")
     private String oldPassword;
 
-    @Size(min = 8, message = "NEW_PASSWORD_INVALID")
+    @NotBlank(message = "PASSWORD_REQUIRED")
+    @Size(min = 8, message = "PASSWORD_INVALID")
     private String newPassword;
 
-    @Size(min = 8, message = "CONFIRM_PASSWORD_INVALID")
+    @NotBlank(message = "CONFIRM_PASSWORD_REQUIRED")
     private String confirmPassword;
 }

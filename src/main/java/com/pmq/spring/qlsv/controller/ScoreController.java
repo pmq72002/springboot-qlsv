@@ -1,15 +1,13 @@
 package com.pmq.spring.qlsv.controller;
 
-import com.pmq.spring.qlsv.constant.StudentSub;
+import com.pmq.spring.qlsv.dto.response.ApiResponse;
+import com.pmq.spring.qlsv.dto.response.ScoreSummaryResponse;
 import com.pmq.spring.qlsv.model.Score;
 import com.pmq.spring.qlsv.service.ScoreService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -32,24 +30,10 @@ public class ScoreController {
 
     // Xem ket qua do truot cua sinh vien
     @GetMapping("/{stuCode}/subject/summary")
-    public List<Map<String, Object>> getSummaryScore(@PathVariable String stuCode) {
-        List<Score> scoreList = scoreService.getScoreListByStudent(stuCode);
-        return scoreList.stream().map(score -> {
-            Map<String, Object> map = new LinkedHashMap<>();
-            map.put(StudentSub.STUCODE, score.getStudent().getStuCode());
-            map.put(StudentSub.STUNAME, score.getStudent().getStuName());
-            map.put(StudentSub.SUBCODE, score.getSubject().getSubCode());
-            map.put(StudentSub.SUBNUM, score.getSubject().getSubNum());
-            map.put(StudentSub.SUBNAME, score.getSubject().getSubName());
-            map.put(StudentSub.PROCESSPOINT, score.getProcessPoint());
-            map.put(StudentSub.COMPONENTPOINT, score.getComponentPoint());
-
-            double summaryScore = scoreService.summaryScoreCal(score);
-            map.put(StudentSub.SUMMARYSCORE, summaryScore);
-
-            map.put(StudentSub.PASSSUB, scoreService.passedSub(score) ? StudentSub.PASS : StudentSub.FAILED);
-
-            return map;
-        }).toList();
+    public ApiResponse<List<ScoreSummaryResponse>> getSummaryScore(@PathVariable String stuCode) {
+       return ApiResponse.<List<ScoreSummaryResponse>>builder()
+                .result(scoreService.getScoreListByStudent(stuCode))
+                .message("lấy danh sách tổng kết thành công")
+                .build();
     }
 }
