@@ -7,7 +7,7 @@
               leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 
     <property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter1.jrdax"/>
-
+    <parameter name="title" class="java.lang.String"/>
     <queryString language="sql">
         <![CDATA[
         SELECT s.stuCode, s.stuName, sub.subName, sc.processPoint, sc.componentPoint
@@ -24,7 +24,17 @@
     <field name="componentPoint" class="java.lang.Double"/>
 
     <background/>
-    <title/>
+    <title>
+        <band height="50">
+            <textField>
+                <reportElement x="0" y="0" width="500" height="30"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="18" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{title}]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
     <pageHeader/>
 
     <!-- Column Header -->

@@ -87,6 +87,7 @@ public class SubjectController {
     @DeleteMapping("/subject/{subCode}")
     @CacheEvict(value = "allSubjects", allEntries = true)
     public ApiResponse<Void> deleteSubject(@PathVariable String subCode) {
+        subjectService.deleteSubject(subCode);
         ApiResponse<Void> apiResponse = new ApiResponse<>();
         apiResponse.setMessage("Xóa thành công môn học: ");
         return apiResponse;

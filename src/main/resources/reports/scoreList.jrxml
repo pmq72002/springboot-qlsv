@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports
+              http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="ScoreSummaryReport" pageWidth="595" pageHeight="842" columnWidth="555"
+              leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20"
+              language="java">
+
+    <!-- Parameter tiêu đề -->
+    <parameter name="title" class="java.lang.String"/>
+
+    <!-- Fields từ ScoreSummaryResponse -->
+    <field name="subName" class="java.lang.String"/>
+    <field name="processPoint" class="java.lang.Double"/>
+    <field name="componentPoint" class="java.lang.Double"/>
+    <field name="summaryScore" class="java.lang.Double"/>
+    <field name="passStatus" class="java.lang.String"/>
+
+    <!-- Variable STT -->
+    <variable name="STT" class="java.lang.Integer" calculation="Nothing" resetType="Report">
+        <variableExpression><![CDATA[$V{STT} == null ? 1 : $V{STT} + 1]]></variableExpression>
+    </variable>
+
+    <!-- Title -->
+    <title>
+        <band height="50">
+            <textField>
+                <reportElement x="0" y="0" width="555" height="30"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="Arial" pdfFontName="fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true" size="18" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{title}]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+
+    <!-- Column Header -->
+    <columnHeader>
+        <band height="25">
+            <staticText>
+                <reportElement x="0" y="0" width="40" height="25"/>
+                <textElement>
+                    <font fontName="Arial" pdfFontName="fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <text><![CDATA[STT]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="50" y="0" width="150" height="25"/>
+                <textElement>
+                    <font fontName="Arial" pdfFontName="fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <text><![CDATA[Môn học]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="210" y="0" width="60" height="25"/>
+                <textElement>
+                    <font fontName="Arial" pdfFontName="fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <text><![CDATA[Điểm QT]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="280" y="0" width="60" height="25"/>
+                <textElement>
+                    <font fontName="Arial" pdfFontName="fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <text><![CDATA[Điểm TP]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="350" y="0" width="60" height="25"/>
+                <textElement>
+                    <font fontName="Arial" pdfFontName="fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <text><![CDATA[Tổng kết]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="420" y="0" width="80" height="25"/>
+                <textElement>
+                    <font fontName="Arial" pdfFontName="fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <text><![CDATA[Kết quả]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+
+    <!-- Detail -->
+    <detail>
+        <band height="20">
+            <textField>
+                <reportElement x="0" y="0" width="40" height="20"/>
+                <textElement>
+                    <font fontName="Arial" pdfFontName="fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{STT}]]></textFieldExpression>
+            </textField>
+
+            <textField>
+                <reportElement x="50" y="0" width="150" height="20"/>
+                <textElement>
+                    <font fontName="Arial" pdfFontName="fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{subName}]]></textFieldExpression>
+            </textField>
+
+            <textField>
+                <reportElement x="210" y="0" width="60" height="20"/>
+                <textElement>
+                    <font fontName="Arial" pdfFontName="fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{processPoint}]]></textFieldExpression>
+            </textField>
+
+            <textField>
+                <reportElement x="280" y="0" width="60" height="20"/>
+                <textElement>
+                    <font fontName="Arial" pdfFontName="fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{componentPoint}]]></textFieldExpression>
+            </textField>
+
+            <textField>
+                <reportElement x="350" y="0" width="60" height="20"/>
+                <textElement>
+                    <font fontName="Arial" pdfFontName="fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{summaryScore}]]></textFieldExpression>
+            </textField>
+
+            <textField>
+                <reportElement x="420" y="0" width="80" height="20"/>
+                <textElement>
+                    <font fontName="Arial" pdfFontName="fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{passStatus}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+</jasperReport>
