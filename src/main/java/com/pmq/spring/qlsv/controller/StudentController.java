@@ -5,6 +5,7 @@ import com.pmq.spring.qlsv.dto.response.ApiResponse;
 import com.pmq.spring.qlsv.dto.response.StudentResponse;
 import com.pmq.spring.qlsv.model.Student;
 import com.pmq.spring.qlsv.model.StudentList;
+import com.pmq.spring.qlsv.service.StudentProducer;
 import com.pmq.spring.qlsv.service.StudentService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -22,10 +23,12 @@ import java.util.List;
 public class StudentController {
 
     private final StudentService studentService;
+    private final StudentProducer studentProducer;
 
     @Autowired
-    public StudentController(StudentService studentService) {
+    public StudentController(StudentService studentService, StudentProducer studentProducer) {
         this.studentService = studentService;
+        this.studentProducer = studentProducer;
     }
 
     //add sinh vien
@@ -34,6 +37,8 @@ public class StudentController {
     public ApiResponse<StudentResponse> createStudent(@RequestBody @Valid Student student) {
         ApiResponse<StudentResponse> apiResponse = new ApiResponse<>();
         StudentResponse saved = studentService.saveStudent(student);
+        String message = "Student created: " + saved.getStuCode();
+        studentProducer.sendStudentCreated(message);
         apiResponse.setCode(1000);
         apiResponse.setMessage("Tạo sinh viên thành công!");
         apiResponse.setResult(saved);
