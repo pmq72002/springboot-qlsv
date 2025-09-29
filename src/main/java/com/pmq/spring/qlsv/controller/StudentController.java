@@ -71,6 +71,7 @@ public class StudentController {
 
     //edit sinh vien
     @PutMapping("/{stuCode}")
+    @CacheEvict(value = "allStudents", allEntries = true)
     public ApiResponse<StudentResponse> updateStudent(@PathVariable String stuCode, @RequestBody Student student) {
         ApiResponse<StudentResponse> apiResponse = new ApiResponse<>();
         StudentResponse updated = studentService.updateStudent(stuCode, student);

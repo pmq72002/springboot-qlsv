@@ -29,9 +29,13 @@ public class SubjectService {
     public List<SubjectList> getAllSubjectList() {
         log.info("IN method get Subject List");
         log.info("⏳ Querying DB...");
-        return subjectRepository.findAll()
+        return subjectRepository.findSubjectList()
                 .stream()
-                .map(sj -> new SubjectList(sj.getSubCode(), sj.getSubName(), sj.getSubNum()))
+                .map(obj -> new SubjectList(
+                        (String) obj[0],
+                        (String) obj[1],
+                        ((Number) obj[2]).intValue()
+                ))
                 .toList();
     }
 

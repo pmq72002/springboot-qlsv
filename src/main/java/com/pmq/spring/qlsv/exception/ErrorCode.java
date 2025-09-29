@@ -22,7 +22,8 @@ public enum ErrorCode {
     SUBJECT_NOT_EXISTED(1014, "Môn học không tồn tại"),
     ALREADY_REGISTER(1015, "Sinh viên đã đăng ký môn học này rồi"),
     PASSWORD_REQUIRED(1016,"Mật khẩu không được để trống "),
-    CONFIRM_PASSWORD_REQUIRED(1017,"Xác nhận mật khẩu không được để trống ");
+    CONFIRM_PASSWORD_REQUIRED(1017,"Xác nhận mật khẩu không được để trống "),
+    TOKEN_EXPIRED(1018,"Phiên đăng nhập kết thúc");
 
     ErrorCode(int code, String message) {
         this.code = code;

@@ -65,6 +65,7 @@ public class SubjectController {
 
     //edit mon hoc
     @PutMapping("/subject/{subCode}")
+    @CacheEvict(value = "allSubjects", allEntries = true)
     public ApiResponse<SubjectResponse> updateSubject(@PathVariable String subCode, @RequestBody Subject subject) {
         ApiResponse<SubjectResponse> apiResponse = new ApiResponse<>();
         SubjectResponse updated = subjectService.updateSubject(subCode, subject);
