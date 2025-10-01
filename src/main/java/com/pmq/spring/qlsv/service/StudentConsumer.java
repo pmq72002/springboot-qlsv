@@ -10,6 +10,10 @@ import org.springframework.stereotype.Service;
 public class StudentConsumer {
     @RabbitListener(queues = RabbitConfig.QUEUE_NAME)
     public void receiveMessage(String message) {
-            log.info("Received: " + message);
+        log.info("Received: " + message);
+    }
+    @RabbitListener(queues = RabbitConfig.QUEUE_PDF)
+    public void receivePdfMessage(String message) {
+        log.info("PDF received: " + message);
     }
 }

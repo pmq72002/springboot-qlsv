@@ -36,6 +36,7 @@ public class StudentController {
     @CacheEvict(value = "allStudents", allEntries = true)
     public ApiResponse<StudentResponse> createStudent(@RequestBody @Valid Student student) {
         ApiResponse<StudentResponse> apiResponse = new ApiResponse<>();
+        log.info("------student create------");
         StudentResponse saved = studentService.saveStudent(student);
         String message = "Student created: " + saved.getStuCode();
         studentProducer.sendStudentCreated(message);

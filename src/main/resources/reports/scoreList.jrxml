@@ -11,6 +11,7 @@
     <parameter name="title" class="java.lang.String"/>
 
     <!-- Fields từ ScoreSummaryResponse -->
+    <field name="subCode" class="java.lang.String"/>
     <field name="subName" class="java.lang.String"/>
     <field name="processPoint" class="java.lang.Double"/>
     <field name="componentPoint" class="java.lang.Double"/>
@@ -47,6 +48,13 @@
             </staticText>
             <staticText>
                 <reportElement x="50" y="0" width="150" height="25"/>
+                <textElement>
+                    <font fontName="Arial" pdfFontName="fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <text><![CDATA[Mã môn học]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="120" y="0" width="150" height="25"/>
                 <textElement>
                     <font fontName="Arial" pdfFontName="fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
                 </textElement>
@@ -96,6 +104,14 @@
 
             <textField>
                 <reportElement x="50" y="0" width="150" height="20"/>
+                <textElement>
+                    <font fontName="Arial" pdfFontName="fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{subCode}]]></textFieldExpression>
+            </textField>
+
+            <textField>
+                <reportElement x="120" y="0" width="150" height="20"/>
                 <textElement>
                     <font fontName="Arial" pdfFontName="fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
                 </textElement>

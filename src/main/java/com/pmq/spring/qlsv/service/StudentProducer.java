@@ -18,4 +18,8 @@ public class StudentProducer {
         rabbitTemplate.convertAndSend(RabbitConfig.QUEUE_NAME, message);
         log.info("rabbit sent: " + message);
     }
+    public void sendPdfExport(String message){
+        rabbitTemplate.convertAndSend(RabbitConfig.QUEUE_PDF,message);
+        log.info("rabbit pdf sent: " + message);
+    }
 }
